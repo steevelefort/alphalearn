@@ -1,0 +1,56 @@
+.atelier {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Apparition depuis le fondu crème de l'accueil */
+.atelier::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #fff6e3;
+  pointer-events: none;
+  animation: atelier-apparait 0.8s ease-out forwards;
+}
+
+@keyframes atelier-apparait {
+  to {
+    opacity: 0;
+  }
+}
+
+.atelier-bobi {
+  position: absolute;
+  left: 3%;
+  bottom: 0;
+  width: 47%;
+}
+
+/* Bras arrière, comme « Coucou » : il se balance autour de son attache */
+.atelier-bras {
+  transform-origin: 493px 446px;
+  animation: atelier-coucou 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes atelier-coucou {
+  from {
+    transform: rotate(-7.5deg);
+  }
+  to {
+    transform: rotate(7.5deg);
+  }
+}
+
+/* Pelle avant, comme « Bravo » : elle monte et descend doucement */
+.atelier-lame {
+  animation: atelier-pelle 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes atelier-pelle {
+  to {
+    transform: translateY(-30px);
+  }
+}

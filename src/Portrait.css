@@ -1,0 +1,34 @@
+.portrait {
+  display: none;
+}
+
+@media (orientation: portrait) {
+  .portrait {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4vh;
+    padding: 0 6vw;
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+.portrait-bulle {
+  margin: 0;
+  border: 4px solid #ed8b31;
+  border-radius: 26px;
+  padding: 20px 28px;
+  background: white;
+  color: #51351d;
+  font: bold clamp(24px, 6vw, 48px) system-ui;
+  text-align: center;
+}
+
+.portrait-bobi {
+  width: min(80vw, 50vh);
+}

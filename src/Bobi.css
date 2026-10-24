@@ -1,0 +1,23 @@
+.bobi {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.bobi img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
+}
+
+.bobi .bobi-yeux {
+  width: 55%;
+  left: 22.5%;
+  top: 4%;
+}
+
+.bobi .bobi-bouche {
+  width: 48%;
+  left: 26%;
+  top: 27%;
+}
