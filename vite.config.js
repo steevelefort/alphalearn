@@ -5,4 +5,9 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   base: '/alphalearn/',
+  build: {
+    // iPad 7 (iPadOS 13) : empêche le minifieur de produire du CSS trop récent
+    // (inset, media queries « width<=… »)
+    cssTarget: 'safari13',
+  },
 })
