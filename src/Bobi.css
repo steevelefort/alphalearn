@@ -1,11 +1,19 @@
 .bobi {
   position: relative;
-  aspect-ratio: 1;
+}
+
+/* Rend Bobi carré : la marge en % suit la largeur de .bobi
+   (aspect-ratio n'existe pas sur les vieux Safari) */
+.bobi::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
 }
 
 .bobi img {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: auto;
 }

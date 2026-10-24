@@ -1,6 +1,9 @@
 .atelier {
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   overflow: hidden;
   background-position: center;
   background-size: cover;
@@ -10,7 +13,10 @@
 .atelier::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: #fff6e3;
   pointer-events: none;
   animation: atelier-apparait 0.8s ease-out forwards;
@@ -22,11 +28,13 @@
   }
 }
 
+/* Même distance du bord gauche et du bas */
 .atelier-bobi {
   position: absolute;
-  left: 3%;
-  bottom: 0;
-  width: 47%;
+  left: 3.5vw;
+  bottom: 3.5vw;
+  width: 43.5%;
+  overflow: visible;
 }
 
 /* Bras arrière, comme « Coucou » : il se balance autour de son attache */

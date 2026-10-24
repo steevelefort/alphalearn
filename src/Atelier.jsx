@@ -6,11 +6,12 @@ import yeux from './assets/yeux/yeux-01-neutres.png'
 import bouche from './assets/bouches/parole/bouche-fermee.png'
 import './Atelier.css'
 
-// Coordonnées reprises de la maquette animation.html (repère de Bobi)
+// Coordonnées reprises de la maquette animation.html (repère de Bobi).
+// Le viewBox est cadré au plus près de Bobi : de la pelle du bras arrière au bas de la lame.
 function Atelier() {
   return (
     <div className="atelier" style={{ backgroundImage: `url(${decor})` }}>
-      <svg className="atelier-bobi" viewBox="100 60 1020 760" role="img" aria-label="Bobi">
+      <svg className="atelier-bobi" viewBox="166 60 944 684" role="img" aria-label="Bobi">
         <ellipse cx="710" cy="750" rx="350" ry="25" fill="#d2c39b" opacity="0.24" />
         <g className="atelier-bras">
           <image href={brasArriere} x="128.5" y="82.8" width="435" height="435" />
