@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import backgroundImage from './assets/backgrounds/construction-site.png'
+import backgroundImage from './assets/backgrounds/construction-site.jpg'
 import titleImage from './assets/title/title.png'
 import Bobi from './Bobi'
 import { PlayIcon } from './InlineIcons'

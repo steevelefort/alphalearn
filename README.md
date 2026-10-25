@@ -78,6 +78,20 @@ Les icônes de l'application et les écrans de démarrage iOS sont générés à
 scripts/generate-icons.sh chemin/vers/icone-grand-format.png
 ```
 
+### Images
+
+Les originaux (exports de ChatGPT) sont dans `design/source-images/`, en dehors de `src/` : ils ne sont jamais inclus dans le site. Le script suivant produit les images du jeu dans `src/assets/`, sans perte visible :
+
+```bash
+nix shell nixpkgs#oxipng --command scripts/optimize-images.sh
+```
+
+- dimensions réduites à ce qui est utile : 2 pixels par point affiché sur iPad 7, au-delà l'écran ne peut rien montrer de plus. Ça allège aussi la mémoire, importante sur l'iPad Mini 2 ;
+- PNG recompressés sans perte, décor en JPEG ;
+- PNG et JPEG uniquement : Safari 12 (iPad Mini 2) ne lit pas le WebP.
+
+Après un nouvel export, il suffit de remplacer le fichier dans `design/source-images/` et de relancer le script. Une nouvelle image doit avoir sa largeur maximale dans le script (`max_width_for`).
+
 ### Organisation du code
 
 ```
@@ -92,7 +106,9 @@ src/
 ├── drawCountsStorage.js    compteurs du tirage gardés sur l'appareil
 ├── fonts.js                chargement des polices du jeu
 ├── letterFonts.js          polices des lettres, qui alternent d'un tour à l'autre
-└── assets/                 images de Bobi, du décor et du titre, sons
+└── assets/                 images optimisées (produites par scripts/optimize-images.sh), sons
+design/
+└── source-images/          originaux des images (non inclus dans le site)
 public/
 ├── manifest.webmanifest    description de l'application installable
 ├── sw.js                   service worker (fonctionnement hors ligne)

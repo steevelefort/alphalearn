@@ -12,7 +12,7 @@ source_image="$1"
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
 icons_dir="$project_root/public/icons"
 splash_dir="$project_root/public/splash"
-background_image="$project_root/src/assets/backgrounds/construction-site.png"
+background_image="$project_root/design/source-images/backgrounds/construction-site.png"
 fill_color='#fff6e3'
 
 mkdir -p "$icons_dir" "$splash_dir"

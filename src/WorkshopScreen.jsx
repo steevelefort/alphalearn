@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import backgroundImage from './assets/backgrounds/construction-site.png'
+import backgroundImage from './assets/backgrounds/construction-site.jpg'
 import bodyImage from './assets/bobi/body.png'
 import foldedBackArmImage from './assets/bobi/back-arm-folded.png'
 import bladeImage from './assets/bobi/blade.png'

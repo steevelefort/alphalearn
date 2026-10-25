@@ -1,4 +1,4 @@
-import backgroundImage from './assets/backgrounds/construction-site.png'
+import backgroundImage from './assets/backgrounds/construction-site.jpg'
 import Bobi from './Bobi'
 import { RotateIcon } from './InlineIcons'
 import './RotateDeviceScreen.css'

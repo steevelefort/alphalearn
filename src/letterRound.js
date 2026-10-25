@@ -20,15 +20,17 @@ const INSTRUCTION_TEMPLATES = [
   (soundsDescription) => `Peux-tu trouver la lettre qui ${soundsDescription} ?`,
 ]
 
-// « a, b ou c »
-function joinWithOr(items) {
+// « a, b, ou, c » : les virgules autour de « ou » font marquer une petite pause à la synthèse vocale,
+// sinon deux sons courts s'enchaînent trop vite pour être compris (« oueu ou veu »),
+// et « ou » se colle au son suivant (« ouveu »). Ces phrases ne sont que lues, jamais affichées.
+function joinWithPausedOr(items) {
   if (items.length <= 1) return items.join('')
-  return `${items.slice(0, -1).join(', ')} ou ${items[items.length - 1]}`
+  return `${items.slice(0, -1).join(', ')}, ou, ${items[items.length - 1]}`
 }
 
-// Les sons de la lettre, entre guillemets : « beu », ou « gueu » ou « jeu »
+// Les sons de la lettre, entre guillemets : « beu », ou « gueu », ou, « jeu »
 export function listLetterSounds(letter) {
-  return joinWithOr(letter.sounds.map((letterSound) => putInFrenchQuotes(letterSound.pronunciation)))
+  return joinWithPausedOr(letter.sounds.map((letterSound) => putInFrenchQuotes(letterSound.pronunciation)))
 }
 
 // Ce que fait la lettre, à placer après « la lettre qui » :
