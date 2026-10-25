@@ -6,8 +6,10 @@ export default defineConfig({
   plugins: [react()],
   base: '/alphalearn/',
   build: {
-    // iPad 7 (iPadOS 13) : empêche le minifieur de produire du CSS trop récent
-    // (inset, media queries « width<=… »)
-    cssTarget: 'safari13',
+    // Vieux iPad : iPad 7 (cible) et iPad Mini 2 (témoin, iOS 12 / Safari 12).
+    // Sans ça, Vite produit du JS trop récent (?., ??, ??=) : page blanche sur Safari 12.
+    target: 'safari12',
+    // CSS : empêche le minifieur de produire inset, media queries « width<=… », etc.
+    cssTarget: 'safari12',
   },
 })
