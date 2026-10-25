@@ -4,6 +4,10 @@
 
 L'enfant y est guidé par **Bobi**, une petite pelleteuse jaune qui parle. Bobi prononce un son, par exemple « beu », et l'enfant doit retrouver, parmi plusieurs lettres affichées, celle qui fait ce son.
 
+**▶ Jouer : [steevelefort.github.io/alphalearn](https://steevelefort.github.io/alphalearn/)**
+
+Le jeu est pensé pour un iPad tenu à l'horizontale, avec le son activé. Pour l'installer comme une application : dans Safari, Partager → « Sur l'écran d'accueil ».
+
 > 🚧 Projet en cours : l'écran d'accueil est terminé, l'écran de jeu est en construction.
 
 ## Comment le projet est fabriqué
@@ -56,7 +60,7 @@ Tout le code doit donc fonctionner sur **Safari 12** :
 
 - [React](https://react.dev) 19 et [Vite](https://vite.dev) 8, en JavaScript.
 - Lint : [Oxlint](https://oxc.rs).
-- Hébergement : GitHub Pages, à l'adresse `https://steevelefort.github.io/alphalearn/`.
+- Hébergement : GitHub Pages, à l'adresse [https://steevelefort.github.io/alphalearn/](https://steevelefort.github.io/alphalearn/).
 
 ### Commandes
 
