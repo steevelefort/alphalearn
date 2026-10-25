@@ -2,13 +2,14 @@
 // - Les pages (index.html) : réseau d'abord, pour récupérer la dernière version ; sinon le cache.
 // - Le reste (JS, CSS, images) : cache d'abord. Vite ajoute un hash au nom de ces fichiers,
 //   une nouvelle version porte donc un nouveau nom et n'est jamais masquée par le cache.
-// Écrit en JavaScript ancien (pas de ?. ni d'async/await) pour Safari 12 et 13.
+// Ce fichier n'est pas transformé par Vite : il est écrit en JavaScript ancien
+// (pas de ?., ni d'async/await, ni de const) pour Safari 12.
 
-var CACHE = 'alphalearn-v1'
+var CACHE_NAME = 'alphalearn-v1'
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
-    caches.open(CACHE).then(function (cache) {
+    caches.open(CACHE_NAME).then(function (cache) {
       return cache.add('./')
     }).then(function () {
       return self.skipWaiting()
@@ -18,11 +19,11 @@ self.addEventListener('install', function (event) {
 
 self.addEventListener('activate', function (event) {
   event.waitUntil(
-    caches.keys().then(function (noms) {
-      return Promise.all(noms.filter(function (nom) {
-        return nom !== CACHE
-      }).map(function (nom) {
-        return caches.delete(nom)
+    caches.keys().then(function (cacheNames) {
+      return Promise.all(cacheNames.filter(function (cacheName) {
+        return cacheName !== CACHE_NAME
+      }).map(function (outdatedCacheName) {
+        return caches.delete(outdatedCacheName)
       }))
     }).then(function () {
       return self.clients.claim()
@@ -30,38 +31,42 @@ self.addEventListener('activate', function (event) {
   )
 })
 
-function enregistrer(requete, reponse) {
-  if (reponse.ok) {
-    var copie = reponse.clone()
-    caches.open(CACHE).then(function (cache) {
-      cache.put(requete, copie)
+function storeResponseInCache(request, response) {
+  if (response.ok) {
+    var responseCopy = response.clone()
+    caches.open(CACHE_NAME).then(function (cache) {
+      cache.put(request, responseCopy)
     })
   }
-  return reponse
+  return response
+}
+
+function fetchPageFromNetworkThenCache(request) {
+  return fetch(request).then(function (response) {
+    return storeResponseInCache(request, response)
+  }).catch(function () {
+    return caches.match(request).then(function (cachedResponse) {
+      return cachedResponse || caches.match('./')
+    })
+  })
+}
+
+function fetchAssetFromCacheThenNetwork(request) {
+  return caches.match(request).then(function (cachedResponse) {
+    return cachedResponse || fetch(request).then(function (response) {
+      return storeResponseInCache(request, response)
+    })
+  })
 }
 
 self.addEventListener('fetch', function (event) {
-  var requete = event.request
-  if (requete.method !== 'GET' || new URL(requete.url).origin !== self.location.origin) return
+  var request = event.request
+  var isSameOriginGetRequest = request.method === 'GET' && new URL(request.url).origin === self.location.origin
+  if (!isSameOriginGetRequest) return
 
-  if (requete.mode === 'navigate') {
-    event.respondWith(
-      fetch(requete).then(function (reponse) {
-        return enregistrer(requete, reponse)
-      }).catch(function () {
-        return caches.match(requete).then(function (enCache) {
-          return enCache || caches.match('./')
-        })
-      })
-    )
-    return
+  if (request.mode === 'navigate') {
+    event.respondWith(fetchPageFromNetworkThenCache(request))
+  } else {
+    event.respondWith(fetchAssetFromCacheThenNetwork(request))
   }
-
-  event.respondWith(
-    caches.match(requete).then(function (enCache) {
-      return enCache || fetch(requete).then(function (reponse) {
-        return enregistrer(requete, reponse)
-      })
-    })
-  )
 })
