@@ -1,0 +1,66 @@
+/* Écran de test : simple, et qui défile (contrairement aux écrans du jeu) */
+.sound-check-screen {
+  padding: 24px;
+  color: #6b3f1d;
+}
+
+.sound-check-title {
+  margin: 0 0 8px;
+  font-size: 32px;
+}
+
+.sound-check-help,
+.sound-check-option {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.sound-check-option input {
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  vertical-align: -4px;
+}
+
+/* Pas de `gap` en flexbox (absent de Safari 12) : l'écart vient des marges */
+.sound-check-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -6px;
+}
+
+.sound-check-letter {
+  margin: 6px;
+  border: 3px solid #ed8b31;
+  border-radius: 14px;
+  padding: 8px 10px;
+  background: white;
+  text-align: center;
+}
+
+.sound-check-symbol {
+  display: block;
+  font-family: var(--font-reading);
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.sound-check-row {
+  white-space: nowrap;
+}
+
+.sound-check-button {
+  min-width: 64px;
+  margin: 3px;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #ed8b31;
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.sound-check-button:active {
+  background: #b86720;
+}

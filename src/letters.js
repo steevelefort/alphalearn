@@ -7,6 +7,8 @@
 //     comme un nom de lettre (« é » devient « e accent aigu »).
 //     Sauf le i : « hi » est un mot anglais (« salut »), lu « haï ». Et le nom de la lettre i
 //     se prononce justement « i ».
+//     Quand une voix ne reconnaît pas un son écrit (« yeu »), elle peut l'épeler (« Y, E, U ») :
+//     on préfère alors un vrai mot qui se prononce pareil (« yeux »).
 //   - phonemes : de quoi il est fait. Deux lettres qui partagent un phonème
 //     (c et k, s et z, i et y…) ne doivent pas être proposées en même temps.
 //   Une liste vide veut dire que la lettre est muette (h).
@@ -52,7 +54,7 @@ export const letters = [
   { symbol: 'v', type: CONSONANT, sounds: [sound('veu', 'v')], words: ['vélo', 'lavabo', 'ravi'] },
   { symbol: 'w', type: CONSONANT, sounds: [sound('oueu', 'w'), sound('veu', 'v')], words: ['kiwi', 'wapiti', 'wifi'] },
   { symbol: 'x', type: CONSONANT, sounds: [sound('kseu', 'k', 's')], words: ['taxi', 'saxo', 'boxe'] },
-  { symbol: 'y', type: VOWEL, sounds: [sound('i', 'i'), sound('yeu', 'y')], words: ['yoyo', 'pyjama', 'stylo'] },
+  { symbol: 'y', type: VOWEL, sounds: [sound('i', 'i'), sound('yeux', 'y')], words: ['yoyo', 'pyjama', 'stylo'] },
   { symbol: 'z', type: CONSONANT, sounds: [sound('zeu', 'z')], words: ['zéro', 'zébu', 'zigzag'] },
 ]
 
