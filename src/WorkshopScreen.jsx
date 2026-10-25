@@ -11,6 +11,7 @@ import { getAllBlocksLandedDelayMs } from './letterBlockTiming'
 import LetterBlocks from './LetterBlocks'
 import RepeatInstructionButton from './RepeatInstructionButton'
 import ScoreBoard from './ScoreBoard'
+import { playFailureSound, playSuccessSound } from './soundEffects'
 import { speakFrenchText, stopSpeaking } from './speech'
 import { useIdleMouthImage } from './useIdleMouthImage'
 import { useLivelyEyesImage } from './useLivelyEyesImage'
@@ -83,16 +84,19 @@ function WorkshopScreen({ firstName = '' }) {
     }))
   }
 
-  // Mauvaise lettre : Bobi a l'air triste et dit quel son fait la lettre touchée (« Non, ça c'est reu ! »)
+  // Mauvaise lettre : contrebasse qui descend, Bobi a l'air triste et dit quel son fait la lettre touchée
+  // (« Non, ça c'est reu ! »)
   function reactToWrongLetter(chosenLetter) {
+    playFailureSound()
     setBobiReaction(BobiReaction.FAILURE)
     const feedback = createWrongAnswerFeedback(chosenLetter, previousWrongAnswerTemplateIndex.current)
     previousWrongAnswerTemplateIndex.current = feedback.templateIndex
     speakAsBobi(feedback.text, setIsBobiSpeaking)
   }
 
-  // Bonne lettre : Bobi est émerveillé, sourit, et la fenêtre de bonne réponse s'ouvre
+  // Bonne lettre : carillon magique, Bobi est émerveillé, sourit, et la fenêtre de bonne réponse s'ouvre
   function reactToCorrectLetter(chosenLetter) {
+    playSuccessSound()
     setBobiReaction(BobiReaction.SUCCESS)
     const lesson = createCorrectAnswerLesson(chosenLetter, {
       previousEncouragementIndex: previousEncouragementIndex.current,

@@ -25,7 +25,7 @@ function storeFirstName(firstName) {
 }
 
 function sayHelloAndInviteToLearn(firstName, { onSpeechStart, onSpeechEnd }) {
-  const utterance = new SpeechSynthesisUtterance(`Bonjour ${firstName}, allons apprendre !`)
+  const utterance = new SpeechSynthesisUtterance(`Bonjour ${firstName}, allons apprendre à lire !`)
   utterance.lang = 'fr-FR'
   utterance.onstart = onSpeechStart
   utterance.onend = onSpeechEnd

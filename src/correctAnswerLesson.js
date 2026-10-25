@@ -64,6 +64,9 @@ function getSpokenLetterName(symbol) {
   return symbol.toUpperCase()
 }
 
+// On dit « la lettre « O » » plutôt que « un O » : la synthèse vocale ferait la liaison (« un-no »),
+// ce qui fausse justement le son qu'on apprend à l'enfant. Pour la même raison, pas de pluriel
+// (« les lettres U » donnerait « lettres-zu »). Les guillemets aident la voix à détacher la lettre.
 function describeHowToBuildSyllable(syllable) {
   const foundPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.FOUND_LETTER)
   const addedPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.ADDED_LETTER)
@@ -71,12 +74,12 @@ function describeHowToBuildSyllable(syllable) {
   const addedLetterName = getSpokenLetterName(syllable.parts[addedPartIndex].text)
 
   if (helperPart) {
-    return `Avec un ${getSpokenLetterName(helperPart.text)} et un ${addedLetterName}, ça fait ${syllable.text} !`
+    return `Avec la lettre « ${getSpokenLetterName(helperPart.text)} » et la lettre « ${addedLetterName} », ça fait ${syllable.text} !`
   }
   if (addedPartIndex < foundPartIndex) {
-    return `Si tu mets un ${addedLetterName} devant, ça fait ${syllable.text} !`
+    return `Si tu mets la lettre « ${addedLetterName} » devant, ça fait ${syllable.text} !`
   }
-  return `Si tu lui ajoutes un ${addedLetterName}, ça fait ${syllable.text} !`
+  return `Si tu lui ajoutes la lettre « ${addedLetterName} », ça fait ${syllable.text} !`
 }
 
 // Les phrases de Bobi, dans l'ordre d'affichage : la lettre (précédée de l'encouragement), la syllabe, le mot.

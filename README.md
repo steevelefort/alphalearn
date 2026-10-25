@@ -22,6 +22,7 @@ L'objectif est de garder un code propre et compréhensible, sans perdre la maît
 
 - **Graphismes** : générés avec **ChatGPT** (Bobi et ses expressions, le décor du chantier, le titre, l'icône de l'application).
 - **Code** : produit en majorité par **Claude** (Anthropic), puis retouché au besoin par le développeur.
+- **Sons** : effets sonores libres de droits, trouvés sur OpenGameArt (voir [Crédits](#crédits)).
 - **Direction, relecture et tests** : le développeur.
 
 ## Ce que fait l'application
@@ -85,7 +86,7 @@ src/
 ├── RotateDeviceScreen.jsx  « Tourne ton écran », affiché en portrait
 ├── Bobi.jsx                Bobi de face, par calques (corps, yeux, bouche qui parle)
 ├── letters.js              lettres, sons, mots, et tirage sans confusion
-└── assets/                 images de Bobi, du décor et du titre
+└── assets/                 images de Bobi, du décor et du titre, sons
 public/
 ├── manifest.webmanifest    description de l'application installable
 ├── sw.js                   service worker (fonctionnement hors ligne)
@@ -94,3 +95,21 @@ public/
 ```
 
 Le code est écrit en anglais, avec des noms explicites. Les textes destinés aux enfants restent en français.
+
+## Crédits
+
+### Sons
+
+Les sons sont dans `src/assets/sounds/`. Ils ont tous été convertis en MP3 (lisible par Safari 12), avec un volume harmonisé. Certains ont aussi été raccourcis, avec un fondu en fin de son. Seuls les sons importés dans `src/soundEffects.js` sont inclus dans le site ; les autres restent disponibles pour les essais.
+
+| Fichier | Utilisation | Œuvre originale | Auteur | Licence | Modifications |
+|---|---|---|---|---|---|
+| `success-magic-chime.mp3` | bonne réponse (utilisé) | [Shimmer glitter magic](https://opengameart.org/node/2286) | The Berklee College of Music (publié par qubodup) | [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) | converti de FLAC en MP3, volume ajusté |
+| `failure-double-bass-descending.mp3` | mauvaise réponse (utilisé) | `jingles_PIZZA07`, pack [85 Short music jingles](https://opengameart.org/node/22000) | [Kenney](https://www.kenney.nl) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | transposé de deux octaves vers le grave (même durée) et doublé à l'octave supérieure pour rester audible sur les haut-parleurs de tablette, converti d'OGG en MP3, volume ajusté |
+| `failure-low-strings-descending.mp3` | mauvaise réponse (alternative, moins grave) | `jingles_PIZZA07`, pack [85 Short music jingles](https://opengameart.org/node/22000) | [Kenney](https://www.kenney.nl) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | transposé d'une octave vers le grave (même durée), converti d'OGG en MP3, volume ajusté |
+| `failure-short-descending-tone.mp3` | mauvaise réponse (alternative) | `question_002`, pack [Interface Sounds](https://opengameart.org/content/interface-sounds) | [Kenney](https://www.kenney.nl) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | converti d'OGG en MP3, volume ajusté |
+| `success-puzzle-jingle.mp3` | bonne réponse (alternative) | Cozy Puzzle Clear (Jingle), collection [Cozy Puzzle Jingle & Result](https://opengameart.org/content/cozy-puzzle-jingle-result) | MintoDog | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | raccourci à 2,5 s avec fondu, volume ajusté |
+| `failure-puzzle-jingle.mp3` | mauvaise réponse (alternative) | Cozy Puzzle Failure (Jingle), collection [Cozy Puzzle Jingle & Result](https://opengameart.org/content/cozy-puzzle-jingle-result) | MintoDog | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | raccourci à 2,2 s avec fondu, volume ajusté |
+
+Les sons en CC0 peuvent être utilisés sans attribution ; ils sont crédités ici par reconnaissance envers leurs auteurs. Le son en CC-BY 3.0 exige cette attribution.
+
