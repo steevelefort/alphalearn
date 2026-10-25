@@ -28,15 +28,22 @@ function joinWithPausedOr(items) {
   return `${items.slice(0, -1).join(', ')}, ou, ${items[items.length - 1]}`
 }
 
-// Les sons de la lettre, entre guillemets : « beu », ou « gueu », ou, « jeu »
+// « le son « beu » » : « le son » annonce le son et le sépare du mot d'avant.
+// Pas de pause juste avant le son lui-même : après une pause, les voix d'Apple prononcent
+// mal « keu » et « teu » (un souffle parasite). La pause se place donc avant « le son ».
+export function announceSound(pronunciation) {
+  return `le son ${putInFrenchQuotes(pronunciation)}`
+}
+
+// Les sons de la lettre : le son « beu », ou le son « gueu », ou, le son « jeu »
 export function listLetterSounds(letter) {
-  return joinWithPausedOr(letter.sounds.map((letterSound) => putInFrenchQuotes(letterSound.pronunciation)))
+  return joinWithPausedOr(letter.sounds.map((letterSound) => announceSound(letterSound.pronunciation)))
 }
 
 // Ce que fait la lettre, à placer après « la lettre qui » :
-// fait, « beu » pour un seul son, peut faire, « gueu », ou, « jeu » pour plusieurs.
-// La virgule avant le son fait marquer une pause : sans elle, certaines voix enchaînent
-// « fait » et le son comme un seul mot (« faitbeu »). Les guillemets ne suffisent pas toujours.
+// fait, le son « beu » pour un seul son ; peut faire, le son « gueu », ou, le son « jeu » pour plusieurs.
+// La virgule fait marquer une pause après le verbe : sans elle, certaines voix collent
+// le son au mot d'avant (« qui faitbeu »).
 export function describeLetterSounds(letter) {
   const verb = letter.sounds.length === 1 ? 'fait' : 'peut faire'
   return `${verb}, ${listLetterSounds(letter)}`

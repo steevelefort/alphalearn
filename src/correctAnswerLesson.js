@@ -1,5 +1,5 @@
 import { putInFrenchQuotes } from './frenchQuotes'
-import { describeLetterSounds } from './letterRound'
+import { announceSound, describeLetterSounds } from './letterRound'
 import { pickRandomIndexDifferentFrom, pickRandomItem, shuffle } from './random'
 import { findSimpleSyllablesWithLetter, SyllablePartRole } from './syllables'
 
@@ -89,8 +89,8 @@ function describeHowToBuildSyllable(syllable) {
   const addedPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.ADDED_LETTER)
   const helperPart = syllable.parts.find((part) => part.role === SyllablePartRole.HELPER_LETTER)
   const addedLetterName = getSpokenLetterName(syllable.parts[addedPartIndex].text)
-  // Virgule avant la syllabe : une pause, pour que la voix ne la colle pas à « fait »
-  const spokenSyllable = putInFrenchQuotes(getSpokenSyllable(syllable.text))
+  // « ça fait, le son « bo » » : pause après « fait », mais pas juste avant la syllabe (voir announceSound)
+  const spokenSyllable = announceSound(getSpokenSyllable(syllable.text))
 
   if (helperPart) {
     return `Avec la lettre ${getSpokenLetterName(helperPart.text)} et la lettre ${addedLetterName}, ça fait, ${spokenSyllable} !`

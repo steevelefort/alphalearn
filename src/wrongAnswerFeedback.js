@@ -3,7 +3,7 @@ import { pickRandomIndexDifferentFrom } from './random'
 
 // Ce que dit Bobi quand l'enfant touche une mauvaise lettre : le son de la lettre touchée
 const WRONG_ANSWER_TEMPLATES = [
-  // Virgule avant le son : une pause, pour que la voix ne le colle pas au mot d'avant
+  // Pause après « c'est », puis « le son » : le son n'est jamais juste après une pause
   (chosenLetter) => `Non, ça c'est, ${listLetterSounds(chosenLetter)} !`,
   (chosenLetter) => `Oups ! Celle-là ${describeLetterSounds(chosenLetter)}.`,
   (chosenLetter) => `Pas tout à fait : cette lettre ${describeLetterSounds(chosenLetter)}.`,

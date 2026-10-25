@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { getSpokenSyllable } from './correctAnswerLesson'
-import { putInFrenchQuotes } from './frenchQuotes'
+import { announceSound } from './letterRound'
 import { letters } from './letters'
 import { speakFrenchText } from './speech'
 import { findSimpleSyllablesWithLetter } from './syllables'
@@ -34,14 +34,14 @@ const ListeningMode = Object.freeze({
 
 const LISTENING_MODE_LABELS = {
   [ListeningMode.ALONE]: 'Son seul : « keu »',
-  [ListeningMode.IN_SENTENCE_WITH_PAUSE]: 'Phrase, avec une pause (comme le jeu) : « Trouve la lettre qui fait « keu » ! »',
+  [ListeningMode.IN_SENTENCE_WITH_PAUSE]: 'Phrase comme le jeu : « Trouve la lettre qui fait, le son « keu » ! »',
   [ListeningMode.IN_SENTENCE_WITHOUT_PAUSE]: 'Phrase, sans pause : « Trouve la lettre qui fait keu ! »',
 }
 
 // `sentenceStart` : le début de phrase du jeu (consigne pour un son, leçon pour une syllabe)
 function createSentenceToSpeak(pronunciation, listeningMode, sentenceStart) {
   if (listeningMode === ListeningMode.IN_SENTENCE_WITH_PAUSE) {
-    return `${sentenceStart} ${putInFrenchQuotes(pronunciation)} !`
+    return `${sentenceStart}, ${announceSound(pronunciation)} !`
   }
   if (listeningMode === ListeningMode.IN_SENTENCE_WITHOUT_PAUSE) {
     return `${sentenceStart} ${pronunciation} !`
