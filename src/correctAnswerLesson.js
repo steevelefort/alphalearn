@@ -89,15 +89,16 @@ function describeHowToBuildSyllable(syllable) {
   const addedPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.ADDED_LETTER)
   const helperPart = syllable.parts.find((part) => part.role === SyllablePartRole.HELPER_LETTER)
   const addedLetterName = getSpokenLetterName(syllable.parts[addedPartIndex].text)
+  // Virgule avant la syllabe : une pause, pour que la voix ne la colle pas à « fait »
   const spokenSyllable = putInFrenchQuotes(getSpokenSyllable(syllable.text))
 
   if (helperPart) {
-    return `Avec la lettre ${getSpokenLetterName(helperPart.text)} et la lettre ${addedLetterName}, ça fait ${spokenSyllable} !`
+    return `Avec la lettre ${getSpokenLetterName(helperPart.text)} et la lettre ${addedLetterName}, ça fait, ${spokenSyllable} !`
   }
   if (addedPartIndex < foundPartIndex) {
-    return `Si tu mets la lettre ${addedLetterName} devant, ça fait ${spokenSyllable} !`
+    return `Si tu mets la lettre ${addedLetterName} devant, ça fait, ${spokenSyllable} !`
   }
-  return `Si tu lui ajoutes la lettre ${addedLetterName}, ça fait ${spokenSyllable} !`
+  return `Si tu lui ajoutes la lettre ${addedLetterName}, ça fait, ${spokenSyllable} !`
 }
 
 // Les phrases de Bobi, dans l'ordre d'affichage : la lettre (précédée de l'encouragement), la syllabe, le mot.

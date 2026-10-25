@@ -34,10 +34,12 @@ export function listLetterSounds(letter) {
 }
 
 // Ce que fait la lettre, à placer après « la lettre qui » :
-// fait « beu » pour un seul son, peut faire « gueu » ou « jeu » pour plusieurs.
+// fait, « beu » pour un seul son, peut faire, « gueu », ou, « jeu » pour plusieurs.
+// La virgule avant le son fait marquer une pause : sans elle, certaines voix enchaînent
+// « fait » et le son comme un seul mot (« faitbeu »). Les guillemets ne suffisent pas toujours.
 export function describeLetterSounds(letter) {
   const verb = letter.sounds.length === 1 ? 'fait' : 'peut faire'
-  return `${verb} ${listLetterSounds(letter)}`
+  return `${verb}, ${listLetterSounds(letter)}`
 }
 
 // Un tour de jeu : 3 lettres qui ne se confondent pas, celle à trouver, la consigne, et la police.
