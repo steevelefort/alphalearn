@@ -65,6 +65,21 @@ function getSpokenLetterName(symbol) {
   return putInFrenchQuotes(symbol.toUpperCase())
 }
 
+// La syllabe affichée garde son orthographe, mais la synthèse vocale en lit parfois mal
+// certaines : on lui donne alors une graphie qui se prononce comme il faut.
+// À vérifier sur l'appareil avec l'écran caché « ?sons » (section Syllabes).
+const SPOKEN_SYLLABLE_OVERRIDES = {
+  ca: 'ka', // sinon lu « ça » (beaucoup écrivent « ca » sans cédille)
+  py: 'pi', // le y risque d'être lu « i grec »
+  ty: 'ti',
+  pe: 'peu', // « pe » n'est pas un mot : risque d'être épelé
+}
+
+// Ce que la synthèse vocale doit lire pour faire entendre la syllabe
+export function getSpokenSyllable(syllableText) {
+  return SPOKEN_SYLLABLE_OVERRIDES[syllableText] || syllableText
+}
+
 // On dit « la lettre « O » » plutôt que « un O » : la synthèse vocale ferait la liaison (« un-no »),
 // ce qui fausse justement le son qu'on apprend à l'enfant. Pour la même raison, pas de pluriel
 // (« les lettres U » donnerait « lettres-zu »). La syllabe est un son : elle aussi entre guillemets.
@@ -73,7 +88,7 @@ function describeHowToBuildSyllable(syllable) {
   const addedPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.ADDED_LETTER)
   const helperPart = syllable.parts.find((part) => part.role === SyllablePartRole.HELPER_LETTER)
   const addedLetterName = getSpokenLetterName(syllable.parts[addedPartIndex].text)
-  const spokenSyllable = putInFrenchQuotes(syllable.text)
+  const spokenSyllable = putInFrenchQuotes(getSpokenSyllable(syllable.text))
 
   if (helperPart) {
     return `Avec la lettre ${getSpokenLetterName(helperPart.text)} et la lettre ${addedLetterName}, ça fait ${spokenSyllable} !`

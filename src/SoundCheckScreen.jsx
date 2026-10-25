@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { getSpokenSyllable } from './correctAnswerLesson'
 import { putInFrenchQuotes } from './frenchQuotes'
 import { letters } from './letters'
 import { speakFrenchText } from './speech'
+import { findSimpleSyllablesWithLetter } from './syllables'
 import './SoundCheckScreen.css'
 
 // Écran caché, pour écouter tous les sons sur un appareil (ouvert avec « ?sons » dans l'adresse).
@@ -36,22 +38,32 @@ const LISTENING_MODE_LABELS = {
   [ListeningMode.IN_SENTENCE_WITHOUT_PAUSE]: 'Phrase, sans pause : « Trouve la lettre qui fait keu ! »',
 }
 
-function createSentenceToSpeak(pronunciation, listeningMode) {
+// `sentenceStart` : le début de phrase du jeu (consigne pour un son, leçon pour une syllabe)
+function createSentenceToSpeak(pronunciation, listeningMode, sentenceStart) {
   if (listeningMode === ListeningMode.IN_SENTENCE_WITH_PAUSE) {
-    return `Trouve la lettre qui fait ${putInFrenchQuotes(pronunciation)} !`
+    return `${sentenceStart} ${putInFrenchQuotes(pronunciation)} !`
   }
   if (listeningMode === ListeningMode.IN_SENTENCE_WITHOUT_PAUSE) {
-    return `Trouve la lettre qui fait ${pronunciation} !`
+    return `${sentenceStart} ${pronunciation} !`
   }
   return pronunciation
 }
 
-function SoundButton({ pronunciation, label, listeningMode }) {
+// Toutes les syllabes que la leçon peut montrer, tirées des mots de chaque lettre, sans doublon
+const ALL_LESSON_SYLLABLES = [
+  ...new Set(
+    letters.flatMap((letter) =>
+      letter.words.flatMap((word) => findSimpleSyllablesWithLetter(word, letter.symbol).map((syllable) => syllable.text)),
+    ),
+  ),
+].sort()
+
+function SoundButton({ pronunciation, label, listeningMode, sentenceStart = 'Trouve la lettre qui fait' }) {
   return (
     <button
       type="button"
       className="sound-check-button"
-      onClick={() => speakFrenchText(createSentenceToSpeak(pronunciation, listeningMode))}
+      onClick={() => speakFrenchText(createSentenceToSpeak(pronunciation, listeningMode, sentenceStart))}
     >
       {label}
     </button>
@@ -104,6 +116,26 @@ function SoundCheckScreen() {
               ))}
             </div>
           ))}
+      </div>
+
+      <h2 className="sound-check-subtitle">Syllabes de la leçon</h2>
+      <p className="sound-check-help">
+        Comme dans la leçon : « Ça fait… ». Quand la voix lit une autre graphie, elle est indiquée après la flèche.
+      </p>
+      <div className="sound-check-grid">
+        {ALL_LESSON_SYLLABLES.map((syllableText) => {
+          const spokenSyllable = getSpokenSyllable(syllableText)
+          const label = spokenSyllable === syllableText ? syllableText : `${syllableText} → ${spokenSyllable}`
+          return (
+            <SoundButton
+              key={syllableText}
+              pronunciation={spokenSyllable}
+              label={label}
+              listeningMode={listeningMode}
+              sentenceStart="Ça fait"
+            />
+          )
+        })}
       </div>
     </div>
   )
