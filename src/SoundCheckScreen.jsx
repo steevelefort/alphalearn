@@ -11,7 +11,7 @@ import './SoundCheckScreen.css'
 const REAL_WORD_ALTERNATIVES = {
   beu: ['bœufs'],
   deu: ['deux', 'de'],
-  keu: ['queue', 'que'],
+  keu: ['queue', 'que', 'queux', 'keuh', 'kœ'],
   gueu: ['gueux'],
   meu: ['meuh', 'me'],
   neu: ['nœud', 'ne'],
@@ -19,21 +19,39 @@ const REAL_WORD_ALTERNATIVES = {
   veu: ['veux'],
   heu: ['euh'],
   leu: ['le'],
-  teu: ['te'],
-  oueu: ['ou eux'],
+  teu: ['te', 'teuh', 'tœ', "t'eux"],
 }
 
-function createSentenceToSpeak(pronunciation, isSpokenInInstruction) {
-  if (!isSpokenInInstruction) return pronunciation
-  return `Trouve la lettre qui fait ${putInFrenchQuotes(pronunciation)} !`
+// Façons de faire entendre un son, pour comparer : seul, après une pause (les guillemets
+// en créent une, comme dans le jeu), ou au milieu d'une phrase, sans pause
+const ListeningMode = Object.freeze({
+  ALONE: 'alone',
+  IN_SENTENCE_WITH_PAUSE: 'in-sentence-with-pause',
+  IN_SENTENCE_WITHOUT_PAUSE: 'in-sentence-without-pause',
+})
+
+const LISTENING_MODE_LABELS = {
+  [ListeningMode.ALONE]: 'Son seul : « keu »',
+  [ListeningMode.IN_SENTENCE_WITH_PAUSE]: 'Phrase, avec une pause (comme le jeu) : « Trouve la lettre qui fait « keu » ! »',
+  [ListeningMode.IN_SENTENCE_WITHOUT_PAUSE]: 'Phrase, sans pause : « Trouve la lettre qui fait keu ! »',
 }
 
-function SoundButton({ pronunciation, label, isSpokenInInstruction }) {
+function createSentenceToSpeak(pronunciation, listeningMode) {
+  if (listeningMode === ListeningMode.IN_SENTENCE_WITH_PAUSE) {
+    return `Trouve la lettre qui fait ${putInFrenchQuotes(pronunciation)} !`
+  }
+  if (listeningMode === ListeningMode.IN_SENTENCE_WITHOUT_PAUSE) {
+    return `Trouve la lettre qui fait ${pronunciation} !`
+  }
+  return pronunciation
+}
+
+function SoundButton({ pronunciation, label, listeningMode }) {
   return (
     <button
       type="button"
       className="sound-check-button"
-      onClick={() => speakFrenchText(createSentenceToSpeak(pronunciation, isSpokenInInstruction))}
+      onClick={() => speakFrenchText(createSentenceToSpeak(pronunciation, listeningMode))}
     >
       {label}
     </button>
@@ -41,7 +59,7 @@ function SoundButton({ pronunciation, label, isSpokenInInstruction }) {
 }
 
 function SoundCheckScreen() {
-  const [isSpokenInInstruction, setIsSpokenInInstruction] = useState(false)
+  const [listeningMode, setListeningMode] = useState(ListeningMode.ALONE)
 
   return (
     <div className="sound-check-screen">
@@ -49,14 +67,17 @@ function SoundCheckScreen() {
       <p className="sound-check-help">
         Touche un son pour l’entendre. Note ceux que la voix épelle ou lit mal, et compare avec les vrais mots (à droite).
       </p>
-      <label className="sound-check-option">
-        <input
-          type="checkbox"
-          checked={isSpokenInInstruction}
-          onChange={(event) => setIsSpokenInInstruction(event.target.checked)}
-        />
-        Lire dans une consigne (« Trouve la lettre qui fait… »)
-      </label>
+      {Object.values(ListeningMode).map((mode) => (
+        <label key={mode} className="sound-check-option">
+          <input
+            type="radio"
+            name="listening-mode"
+            checked={listeningMode === mode}
+            onChange={() => setListeningMode(mode)}
+          />
+          {LISTENING_MODE_LABELS[mode]}
+        </label>
+      ))}
 
       <div className="sound-check-grid">
         {letters
@@ -69,14 +90,14 @@ function SoundCheckScreen() {
                   <SoundButton
                     pronunciation={pronunciation}
                     label={pronunciation}
-                    isSpokenInInstruction={isSpokenInInstruction}
+                    listeningMode={listeningMode}
                   />
                   {(REAL_WORD_ALTERNATIVES[pronunciation] || []).map((alternative) => (
                     <SoundButton
                       key={alternative}
                       pronunciation={alternative}
                       label={alternative}
-                      isSpokenInInstruction={isSpokenInInstruction}
+                      listeningMode={listeningMode}
                     />
                   ))}
                 </div>

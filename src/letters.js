@@ -8,7 +8,8 @@
 //     Sauf le i : « hi » est un mot anglais (« salut »), lu « haï ». Et le nom de la lettre i
 //     se prononce justement « i ».
 //     Quand une voix ne reconnaît pas un son écrit (« yeu »), elle peut l'épeler (« Y, E, U ») :
-//     on préfère alors un vrai mot qui se prononce pareil (« yeux »).
+//     on préfère alors un vrai mot qui se prononce pareil (« yeux », « ou eux »).
+//     Testé sur iPad avec l'écran caché « ?sons ».
 //   - phonemes : de quoi il est fait. Deux lettres qui partagent un phonème
 //     (c et k, s et z, i et y…) ne doivent pas être proposées en même temps.
 //   Une liste vide veut dire que la lettre est muette (h).
@@ -52,7 +53,7 @@ export const letters = [
   { symbol: 't', type: CONSONANT, sounds: [sound('teu', 't')], words: ['tata', 'tutu', 'titi', 'taxi'] },
   { symbol: 'u', type: VOWEL, sounds: [sound('hu', 'u')], words: ['tutu', 'judo', 'puma', 'mur'] },
   { symbol: 'v', type: CONSONANT, sounds: [sound('veu', 'v')], words: ['vélo', 'lavabo', 'ravi'] },
-  { symbol: 'w', type: CONSONANT, sounds: [sound('oueu', 'w'), sound('veu', 'v')], words: ['kiwi', 'wapiti', 'wifi'] },
+  { symbol: 'w', type: CONSONANT, sounds: [sound('ou eux', 'w'), sound('veu', 'v')], words: ['kiwi', 'wapiti', 'wifi'] },
   { symbol: 'x', type: CONSONANT, sounds: [sound('kseu', 'k', 's')], words: ['taxi', 'saxo', 'boxe'] },
   { symbol: 'y', type: VOWEL, sounds: [sound('i', 'i'), sound('yeux', 'y')], words: ['yoyo', 'pyjama', 'stylo'] },
   { symbol: 'z', type: CONSONANT, sounds: [sound('zeu', 'z')], words: ['zéro', 'zébu', 'zigzag'] },
