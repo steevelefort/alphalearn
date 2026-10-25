@@ -24,30 +24,76 @@ const REAL_WORD_ALTERNATIVES = {
   teu: ['te', 'teuh', 'tœ', "t'eux"],
 }
 
-// Façons de faire entendre un son, pour comparer : seul, après une pause (les guillemets
-// en créent une, comme dans le jeu), ou au milieu d'une phrase, sans pause
-const ListeningMode = Object.freeze({
-  ALONE: 'alone',
-  IN_SENTENCE_WITH_PAUSE: 'in-sentence-with-pause',
-  IN_SENTENCE_WITHOUT_PAUSE: 'in-sentence-without-pause',
-})
+// Façons de faire entendre un son, pour comparer sur l'appareil. `sentenceStart` est le début
+// de phrase du jeu (« Trouve la lettre qui fait » pour un son, « Ça fait » pour une syllabe).
+// Les variantes du jeu gardent la pause après « fait » et changent seulement l'écriture du son.
+const LISTENING_MODES = [
+  { id: 'alone', label: 'Son seul : keu', createSentence: (start, sound) => sound },
+  {
+    id: 'game',
+    label: 'Phrase comme le jeu : « …qui fait, le son « keu » ! »',
+    createSentence: (start, sound) => `${start}, ${announceSound(sound)} !`,
+  },
+  {
+    id: 'straight-quotes',
+    label: 'Guillemets droits : « …qui fait, le son "keu" ! »',
+    createSentence: (start, sound) => `${start}, le son "${sound}" !`,
+  },
+  {
+    id: 'no-quotes',
+    label: 'Sans guillemets : « …qui fait, le son keu ! »',
+    createSentence: (start, sound) => `${start}, le son ${sound} !`,
+  },
+  {
+    id: 'longer-pause',
+    label: 'Pause plus longue : « …qui fait… le son « keu » ! »',
+    createSentence: (start, sound) => `${start}… ${announceSound(sound)} !`,
+  },
+  {
+    id: 'no-pause',
+    label: 'Sans pause ni « le son » : « …qui fait keu ! »',
+    createSentence: (start, sound) => `${start} ${sound} !`,
+  },
+]
 
-const LISTENING_MODE_LABELS = {
-  [ListeningMode.ALONE]: 'Son seul : « keu »',
-  [ListeningMode.IN_SENTENCE_WITH_PAUSE]: 'Phrase comme le jeu : « Trouve la lettre qui fait, le son « keu » ! »',
-  [ListeningMode.IN_SENTENCE_WITHOUT_PAUSE]: 'Phrase, sans pause : « Trouve la lettre qui fait keu ! »',
+function createSentenceToSpeak(pronunciation, listeningModeId, sentenceStart) {
+  const listeningMode = LISTENING_MODES.find((mode) => mode.id === listeningModeId)
+  return listeningMode.createSentence(sentenceStart, pronunciation)
 }
 
-// `sentenceStart` : le début de phrase du jeu (consigne pour un son, leçon pour une syllabe)
-function createSentenceToSpeak(pronunciation, listeningMode, sentenceStart) {
-  if (listeningMode === ListeningMode.IN_SENTENCE_WITH_PAUSE) {
-    return `${sentenceStart}, ${announceSound(pronunciation)} !`
-  }
-  if (listeningMode === ListeningMode.IN_SENTENCE_WITHOUT_PAUSE) {
-    return `${sentenceStart} ${pronunciation} !`
-  }
-  return pronunciation
-}
+// Phrases complètes qui se terminent par « keu » (le son le plus délicat sur iPad),
+// pour choisir à l'oreille la meilleure combinaison de pause, de guillemets et d'annonce.
+// `isUsedByGame` : la phrase que le jeu dit aujourd'hui.
+const KEU_TRIAL_SENTENCES = [
+  { text: 'Trouve la lettre qui fait keu !' },
+  { text: 'Trouve la lettre qui fait « keu » !' },
+  { text: 'Trouve la lettre qui fait "keu" !' },
+  { text: 'Trouve la lettre qui fait, keu !' },
+  { text: 'Trouve la lettre qui fait, « keu » !' },
+  { text: 'Trouve la lettre qui fait, "keu" !' },
+  { text: 'Trouve la lettre qui fait… keu !' },
+  { text: 'Trouve la lettre qui fait… « keu » !' },
+  { text: 'Trouve la lettre qui fait : keu !' },
+  { text: 'Trouve la lettre qui fait : « keu » !' },
+  { text: 'Trouve la lettre qui fait le son keu !' },
+  { text: 'Trouve la lettre qui fait le son « keu » !' },
+  { text: 'Trouve la lettre qui fait le son "keu" !' },
+  { text: 'Trouve la lettre qui fait, le son keu !' },
+  { text: 'Trouve la lettre qui fait, le son « keu » !', isUsedByGame: true },
+  { text: 'Trouve la lettre qui fait, le son "keu" !' },
+  { text: 'Trouve la lettre qui fait… le son keu !' },
+  { text: 'Trouve la lettre qui fait… le son « keu » !' },
+  { text: 'Trouve la lettre qui fait le son : keu !' },
+  { text: 'Trouve la lettre qui fait le son : « keu » !' },
+  { text: 'Trouve la lettre qui fait ce son-là : keu !' },
+  { text: 'Écoute bien. Trouve la lettre qui fait keu !' },
+  { text: 'Trouve la lettre qui fait keu.' },
+  { text: 'Trouve la lettre qui fait « keu ».' },
+  { text: 'Trouve la lettre qui fait, le son « keu ».' },
+  { text: 'Quelle lettre fait le son keu ?' },
+  { text: 'Quelle lettre fait, le son « keu » ?' },
+  { text: 'Trouve la lettre qui fait le son « keu », keu !' },
+]
 
 // Toutes les syllabes que la leçon peut montrer, tirées des mots de chaque lettre, sans doublon
 const ALL_LESSON_SYLLABLES = [
@@ -71,7 +117,7 @@ function SoundButton({ pronunciation, label, listeningMode, sentenceStart = 'Tro
 }
 
 function SoundCheckScreen() {
-  const [listeningMode, setListeningMode] = useState(ListeningMode.ALONE)
+  const [listeningMode, setListeningMode] = useState(LISTENING_MODES[0].id)
 
   return (
     <div className="sound-check-screen">
@@ -79,15 +125,15 @@ function SoundCheckScreen() {
       <p className="sound-check-help">
         Touche un son pour l’entendre. Note ceux que la voix épelle ou lit mal, et compare avec les vrais mots (à droite).
       </p>
-      {Object.values(ListeningMode).map((mode) => (
-        <label key={mode} className="sound-check-option">
+      {LISTENING_MODES.map((mode) => (
+        <label key={mode.id} className="sound-check-option">
           <input
             type="radio"
             name="listening-mode"
-            checked={listeningMode === mode}
-            onChange={() => setListeningMode(mode)}
+            checked={listeningMode === mode.id}
+            onChange={() => setListeningMode(mode.id)}
           />
-          {LISTENING_MODE_LABELS[mode]}
+          {mode.label}
         </label>
       ))}
 
@@ -137,6 +183,21 @@ function SoundCheckScreen() {
           )
         })}
       </div>
+
+      <h2 className="sound-check-subtitle">Phrases d’essai</h2>
+      <p className="sound-check-help">
+        Toutes se terminent par « keu ». Note le numéro de celle qui sonne le mieux, sur chaque appareil.
+      </p>
+      <ol className="sound-check-sentences">
+        {KEU_TRIAL_SENTENCES.map((sentence) => (
+          <li key={sentence.text}>
+            <button type="button" className="sound-check-sentence-button" onClick={() => speakFrenchText(sentence.text)}>
+              {sentence.text}
+              {sentence.isUsedByGame && <span className="sound-check-game-tag"> (phrase actuelle du jeu)</span>}
+            </button>
+          </li>
+        ))}
+      </ol>
     </div>
   )
 }
