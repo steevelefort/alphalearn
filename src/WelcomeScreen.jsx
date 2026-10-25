@@ -66,7 +66,12 @@ function WelcomeScreen({ onTransitionToGameEnd }) {
       style={{ backgroundImage: `url(${backgroundImage})` }}
       onTransitionEnd={detectFinalFadeEnd}
     >
-      <Bobi isAmazed={isTransitionToGameStarted} isSpeaking={isBobiSpeaking} className="welcome-bobi" />
+      <Bobi
+        isAmazed={isTransitionToGameStarted}
+        isSpeaking={isBobiSpeaking}
+        isLively={!isTransitionToGameStarted}
+        className="welcome-bobi"
+      />
       <div className="welcome-column">
         <img src={titleImage} className="welcome-title" alt="Le chantier des lettres. On apprend ensemble ?" />
         <input

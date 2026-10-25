@@ -54,13 +54,15 @@
   }
 }
 
-/* Pelle avant, comme « Bravo » : elle monte et descend doucement */
+/* Lame avant : elle avance et recule doucement, devant Bobi.
+   Seulement vers l'avant depuis sa position de repos : en montant ou en reculant,
+   elle passerait sous la bouche et les yeux, dessinés par-dessus. */
 .workshop-blade {
-  animation: workshop-blade-lift 1.5s ease-in-out infinite alternate;
+  animation: workshop-blade-push 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes workshop-blade-lift {
+@keyframes workshop-blade-push {
   to {
-    transform: translateY(-30px);
+    transform: translateX(24px);
   }
 }

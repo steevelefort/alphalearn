@@ -26,11 +26,13 @@ function pickRandomItem(items) {
   return items[Math.floor(Math.random() * items.length)]
 }
 
-// Bouche de Bobi pendant qu'il attend : fermée, avec de temps en temps un sourire
-export function useIdleMouthImage() {
+// Bouche de Bobi pendant qu'il attend : fermée, avec de temps en temps un sourire.
+// Avec `isActive` à false, elle reste fermée.
+export function useIdleMouthImage(isActive = true) {
   const [idleMouthImage, setIdleMouthImage] = useState(closedMouthImage)
 
   useEffect(() => {
+    if (!isActive) return
     let timer
     function waitThenShowRandomExpression() {
       timer = setTimeout(() => {
@@ -43,8 +45,11 @@ export function useIdleMouthImage() {
     }
 
     waitThenShowRandomExpression()
-    return () => clearTimeout(timer)
-  }, [])
+    return () => {
+      clearTimeout(timer)
+      setIdleMouthImage(closedMouthImage)
+    }
+  }, [isActive])
 
-  return idleMouthImage
+  return isActive ? idleMouthImage : closedMouthImage
 }
