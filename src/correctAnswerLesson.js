@@ -73,6 +73,7 @@ const SPOKEN_SYLLABLE_OVERRIDES = {
   py: 'pi', // le y risque d'être lu « i grec »
   ty: 'ti',
   pe: 'peu', // « pe » n'est pas un mot : risque d'être épelé
+  za: 'zà', // sinon lu « zone d'activité » (Z.A.) ; l'accent empêche d'y voir une abréviation
 }
 
 // Ce que la synthèse vocale doit lire pour faire entendre la syllabe
