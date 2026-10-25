@@ -15,7 +15,15 @@ body {
   -webkit-tap-highlight-color: transparent;
   /* Pas d'attente de Safari après un toucher (il vérifiait si c'était un double toucher pour zoomer) */
   touch-action: manipulation;
-  /* Pas de sélection de texte, ni de menu « Copier » sur un appui long */
+}
+
+/* Pas de sélection de texte, ni de menu « Copier / Enregistrer l'image » sur un appui long.
+   Seulement sur ces éléments, pas sur toute la page : sur iOS, un parent en user-select: none
+   gêne la saisie dans un champ (placement du curseur), même si on la réautorise sur le champ. */
+img,
+svg,
+button,
+p {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -33,10 +41,4 @@ input {
   width: 0.85em;
   height: 0.85em;
   vertical-align: -0.08em;
-}
-
-/* Le prénom doit rester modifiable : sur iPad, sans sélection, on ne peut plus y taper correctement */
-input {
-  -webkit-user-select: text;
-  user-select: text;
 }

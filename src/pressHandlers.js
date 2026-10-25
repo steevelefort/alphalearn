@@ -1,15 +1,21 @@
 // Gestion des appuis sur les boutons du jeu.
-// On réagit dès que le doigt touche l'écran (touchstart), sans attendre qu'il se lève :
-// sur iPad, un « click » est annulé si le doigt glisse un peu ou reste appuyé longtemps,
-// ce qui arrive souvent avec un enfant. Il fallait alors toucher plusieurs fois.
+// On réagit quand le doigt se lève (touchend), sans attendre le « click » : sur iPad, le click
+// est annulé si le doigt glisse un peu ou reste appuyé longtemps, ce qui arrive souvent avec un
+// enfant (il fallait alors toucher plusieurs fois). Le touchend, lui, arrive dans tous les cas.
+// Pas le touchstart : Safari iOS n'y voit pas un geste de l'utilisateur, et refuse alors
+// de faire parler la synthèse vocale ou de jouer un son.
 // Safari 12 (iPad Mini 2) n'a pas les Pointer Events : on combine
-// touchstart (écran tactile), mousedown (souris) et click (clavier : Entrée ou Espace).
+// touchend (écran tactile), mousedown (souris) et click (clavier : Entrée ou Espace).
 
 // Après un toucher, le navigateur envoie aussi de faux événements souris (mousedown, click)
 // au même endroit : on les ignore pendant ce délai, pour qu'un toucher ne compte qu'une fois.
 // Sinon, toucher « Continuer » pourrait aussi choisir la lettre qui se trouve dessous.
 const SIMULATED_MOUSE_EVENTS_DELAY_MS = 1000
 let lastTouchTime = 0
+
+function rememberTouch() {
+  lastTouchTime = Date.now()
+}
 
 function wasJustTouched() {
   return Date.now() - lastTouchTime < SIMULATED_MOUSE_EVENTS_DELAY_MS
@@ -20,8 +26,9 @@ function wasJustTouched() {
 // les événements tactiles sur un bouton désactivé.
 export function createPressHandlers(onPress, { isDisabled = false } = {}) {
   return {
-    onTouchStart: () => {
-      lastTouchTime = Date.now()
+    onTouchStart: rememberTouch,
+    onTouchEnd: () => {
+      rememberTouch()
       if (!isDisabled) onPress()
     },
     onMouseDown: (event) => {
