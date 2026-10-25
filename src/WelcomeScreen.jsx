@@ -3,7 +3,7 @@ import backgroundImage from './assets/backgrounds/construction-site.jpg'
 import titleImage from './assets/title/title.png'
 import Bobi from './Bobi'
 import { PlayIcon } from './InlineIcons'
-import { createPressHandlers } from './pressHandlers'
+import { speakFrenchText } from './speech'
 import './WelcomeScreen.css'
 
 const FIRST_NAME_STORAGE_KEY = 'firstName'
@@ -26,12 +26,10 @@ function storeFirstName(firstName) {
   }
 }
 
+// Doit être appelée pendant le geste de l'enfant (le toucher sur « C'est parti ») :
+// sur iPad, c'est ce premier « Bonjour » qui autorise ensuite Bobi à parler pendant toute la partie.
 function sayHelloAndInviteToLearn(firstName, { onSpeechStart, onSpeechEnd }) {
-  const utterance = new SpeechSynthesisUtterance(`Bonjour ${firstName}, allons apprendre à lire !`)
-  utterance.lang = 'fr-FR'
-  utterance.onstart = onSpeechStart
-  utterance.onend = onSpeechEnd
-  speechSynthesis.speak(utterance)
+  speakFrenchText(`Bonjour ${firstName}, allons apprendre à lire !`, { onStart: onSpeechStart, onEnd: onSpeechEnd })
 }
 
 function WelcomeScreen({ onTransitionToGameEnd }) {
@@ -87,7 +85,7 @@ function WelcomeScreen({ onTransitionToGameEnd }) {
           type="button"
           className="welcome-play-button"
           disabled={!firstName.trim()}
-          {...createPressHandlers(startTransitionToGame, { isDisabled: !firstName.trim() })}
+          onClick={startTransitionToGame}
         >
           <PlayIcon /> C’est parti !
         </button>

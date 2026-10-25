@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createLessonSentences } from './correctAnswerLesson'
 import { PlayIcon } from './InlineIcons'
-import { createPressHandlers } from './pressHandlers'
 import SpeakerIcon from './SpeakerIcon'
 import { speakFrenchSentences } from './speech'
 import { SyllablePartRole } from './syllables'
@@ -109,7 +108,7 @@ function CorrectAnswerPopup({ lesson, onBobiSpeakingChange, onContinue }) {
             className={`correct-answer-replay-button ${isExplanationFinished ? 'is-revealed' : ''}`}
             aria-label="Réécouter"
             disabled={!isExplanationFinished}
-            {...createPressHandlers(speakLesson, { isDisabled: !isExplanationFinished })}
+            onClick={speakLesson}
           >
             <SpeakerIcon />
           </button>
@@ -117,7 +116,7 @@ function CorrectAnswerPopup({ lesson, onBobiSpeakingChange, onContinue }) {
             type="button"
             className={`correct-answer-continue-button ${isExplanationFinished ? 'is-revealed' : ''}`}
             disabled={!isExplanationFinished}
-            {...createPressHandlers(onContinue, { isDisabled: !isExplanationFinished })}
+            onClick={onContinue}
           >
             Continuer <PlayIcon />
           </button>

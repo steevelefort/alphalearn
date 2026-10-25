@@ -1,4 +1,3 @@
-import { createPressHandlers } from './pressHandlers'
 import SpeakerIcon from './SpeakerIcon'
 import './RepeatInstructionButton.css'
 
@@ -11,7 +10,7 @@ function RepeatInstructionButton({ isAvailable, onPress }) {
       className={`repeat-instruction-button ${isAvailable ? 'is-revealed' : ''}`}
       aria-label="Répéter la consigne"
       disabled={!isAvailable}
-      {...createPressHandlers(onPress, { isDisabled: !isAvailable })}
+      onClick={onPress}
     >
       <SpeakerIcon />
     </button>

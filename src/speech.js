@@ -3,6 +3,25 @@
 // en pleine lecture et ne jamais déclencher `onend`.
 let currentUtterances = []
 
+// Voix française choisie explicitement : `lang` seul ne suffit pas toujours (iPad réglé dans
+// une autre langue, voix par défaut étrangère). La liste des voix peut arriver un peu après
+// le chargement de la page : on la relit quand le navigateur signale qu'elle a changé.
+let frenchVoice = null
+
+function findFrenchVoice() {
+  const voices = speechSynthesis.getVoices()
+  return voices.find((voice) => voice.lang === 'fr-FR') || voices.find((voice) => voice.lang.indexOf('fr') === 0) || null
+}
+
+function refreshFrenchVoice() {
+  frenchVoice = findFrenchVoice()
+}
+
+refreshFrenchVoice()
+if ('onvoiceschanged' in speechSynthesis) {
+  speechSynthesis.onvoiceschanged = refreshFrenchVoice
+}
+
 // Après avoir coupé une lecture en cours, Chrome et Safari ignorent parfois la phrase
 // lancée juste derrière. On attend donc un court instant avant de reparler.
 const DELAY_AFTER_INTERRUPTION_MS = 250
@@ -12,6 +31,8 @@ let delayedSpeechTimer = null
 function createFrenchUtterance(text) {
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.lang = 'fr-FR'
+  if (!frenchVoice) refreshFrenchVoice()
+  if (frenchVoice) utterance.voice = frenchVoice
   return utterance
 }
 

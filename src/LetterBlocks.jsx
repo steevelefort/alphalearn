@@ -1,6 +1,5 @@
 import { ChosenLetterResult } from './chosenLetterResult'
 import { BLOCK_FALL_DURATION_MS, BLOCK_FALL_INTERVAL_MS } from './letterBlockTiming'
-import { createPressHandlers } from './pressHandlers'
 import './LetterBlocks.css'
 
 const RESULT_CLASS_NAMES = {
@@ -28,7 +27,7 @@ function LetterBlocks({ roundId, letters, fontClassName, chosenLetterResults = {
             animationDuration: `${BLOCK_FALL_DURATION_MS}ms`,
             animationDelay: `${index * BLOCK_FALL_INTERVAL_MS}ms`,
           }}
-          {...createPressHandlers(() => onLetterPress(letter), { isDisabled: areLettersDisabled })}
+          onClick={() => onLetterPress(letter)}
         >
           {letter.symbol}
         </button>
