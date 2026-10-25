@@ -6,7 +6,26 @@ L'enfant y est guidé par **Bobi**, une petite pelleteuse jaune qui parle. Bobi 
 
 **▶ Jouer : [steevelefort.github.io/alphalearn](https://steevelefort.github.io/alphalearn/)**
 
-Le jeu est pensé pour un iPad tenu à l'horizontale, avec le son activé. Pour l'installer comme une application : dans Safari, Partager → « Sur l'écran d'accueil ».
+Le jeu est pensé pour un iPad tenu à l'horizontale, avec le son activé.
+
+## Installer l'application sur votre écran d'accueil
+
+Une fois installé, le jeu s'ouvre comme une vraie application : sans la barre d'adresse de Safari, avec son icône et son écran de démarrage.
+
+1. Sur l'iPad, ouvrez **Safari** et allez sur [steevelefort.github.io/alphalearn](https://steevelefort.github.io/alphalearn/).
+2. Touchez le bouton **Partager** (un carré avec une flèche vers le haut), en haut à droite de l'écran.
+   Depuis iPadOS 26, s'il n'apparaît pas, touchez d'abord le bouton **•••** à côté de la barre d'adresse, puis **Partager**.
+3. Dans la liste, touchez **« Sur l'écran d'accueil »**. Faites défiler la liste, ou touchez « Afficher plus », si l'option n'est pas visible tout de suite.
+4. Depuis iPadOS 26, laissez activée l'option **« Ouvrir comme app web »**.
+5. Gardez le nom proposé (« alphalearn ») ou changez-le, puis touchez **Ajouter**, en haut à droite.
+6. Lancez le jeu en touchant sa nouvelle icône sur l'écran d'accueil, et non plus depuis Safari.
+
+Bon à savoir :
+
+- Sur les versions plus anciennes d'iPadOS (avant 16.4), seul Safari permet d'ajouter un site à l'écran d'accueil, pas Chrome ni les autres navigateurs.
+- La première ouverture demande une connexion internet ; ensuite, le jeu devrait pouvoir fonctionner hors ligne.
+- Le prénom et la progression du tirage des lettres sont gardés dans l'application installée. Ils ne sont pas partagés avec Safari.
+- Pour retirer le jeu, faites un appui long sur son icône, puis « Supprimer l'app ».
 
 > 🚧 Projet en cours : l'écran d'accueil est terminé, l'écran de jeu est en construction.
 
@@ -34,7 +53,7 @@ L'objectif est de garder un code propre et compréhensible, sans perdre la maît
 - **Écran d'accueil** : l'enfant tape son prénom, puis Bobi lui dit bonjour à voix haute (synthèse vocale du navigateur).
 - **Écran de jeu** (en construction) : Bobi dans le chantier, avec des lettres à retrouver d'après leur son.
 - **Tablette tenue verticalement** : Bobi demande de tourner l'écran, car le jeu se joue en paysage.
-- **Application installable** (PWA) : sur iPad, Safari → Partager → « Sur l'écran d'accueil ». Une fois installé sur l'écran d'accueil, le jeu devrait s'ouvrir en plein écran et pouvoir fonctionner sans connexion.
+- **Application installable** (PWA) : voir [Installer l'application sur votre écran d'accueil](#installer-lapplication-sur-votre-écran-daccueil). Une fois installé, le jeu devrait s'ouvrir en plein écran et pouvoir fonctionner sans connexion.
 
 ### Les lettres et les sons
 
