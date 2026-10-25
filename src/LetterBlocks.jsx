@@ -1,5 +1,6 @@
 import { ChosenLetterResult } from './chosenLetterResult'
 import { BLOCK_FALL_DURATION_MS, BLOCK_FALL_INTERVAL_MS } from './letterBlockTiming'
+import { createPressHandlers } from './pressHandlers'
 import './LetterBlocks.css'
 
 const RESULT_CLASS_NAMES = {
@@ -9,7 +10,7 @@ const RESULT_CLASS_NAMES = {
 
 // Les blocs tombent du haut de l'écran l'un après l'autre, puis se posent au milieu.
 // `roundId` fait partie de la clé : à chaque nouveau tour, les blocs sont recréés et retombent.
-// `areLettersDisabled` empêche de toucher les blocs, par exemple pendant que Bobi réagit.
+// `areLettersDisabled` empêche de toucher les blocs (pendant la fenêtre de bonne réponse).
 // `fontClassName` donne la police des lettres (voir letterFonts.js).
 // `chosenLetterResults` : résultat des lettres déjà touchées, par symbole (rouge si fausse, vert si juste).
 function LetterBlocks({ roundId, letters, fontClassName, chosenLetterResults = {}, areLettersDisabled = false, onLetterPress }) {
@@ -27,7 +28,7 @@ function LetterBlocks({ roundId, letters, fontClassName, chosenLetterResults = {
             animationDuration: `${BLOCK_FALL_DURATION_MS}ms`,
             animationDelay: `${index * BLOCK_FALL_INTERVAL_MS}ms`,
           }}
-          onClick={() => onLetterPress(letter)}
+          {...createPressHandlers(() => onLetterPress(letter), { isDisabled: areLettersDisabled })}
         >
           {letter.symbol}
         </button>

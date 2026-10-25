@@ -3,6 +3,7 @@ import backgroundImage from './assets/backgrounds/construction-site.jpg'
 import titleImage from './assets/title/title.png'
 import Bobi from './Bobi'
 import { PlayIcon } from './InlineIcons'
+import { createPressHandlers } from './pressHandlers'
 import './WelcomeScreen.css'
 
 const FIRST_NAME_STORAGE_KEY = 'firstName'
@@ -86,7 +87,7 @@ function WelcomeScreen({ onTransitionToGameEnd }) {
           type="button"
           className="welcome-play-button"
           disabled={!firstName.trim()}
-          onClick={startTransitionToGame}
+          {...createPressHandlers(startTransitionToGame, { isDisabled: !firstName.trim() })}
         >
           <PlayIcon /> C’est parti !
         </button>

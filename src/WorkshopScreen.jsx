@@ -44,6 +44,8 @@ function WorkshopScreen({ firstName = '' }) {
   const [round, setRound] = useState(() => createLetterRound(null, readStoredDrawCounts()))
   const [isBobiSpeaking, setIsBobiSpeaking] = useState(false)
   const [bobiReaction, setBobiReaction] = useState(null)
+  // Compte les mauvaises réponses : chaque nouvelle erreur relance les 1,5 s de tristesse de Bobi
+  const [wrongAnswerCount, setWrongAnswerCount] = useState(0)
   const [correctAnswerLesson, setCorrectAnswerLesson] = useState(null)
   const [score, setScore] = useState({ successCount: 0, attemptCount: 0 })
   // Résultat des lettres touchées pendant le tour en cours, par symbole : leur bloc change de couleur
@@ -83,12 +85,13 @@ function WorkshopScreen({ firstName = '' }) {
   }, [round])
 
   // Après une mauvaise réponse, Bobi reprend son air habituel : les mêmes lettres restent
-  // jusqu'à ce que l'enfant trouve. (Après une bonne réponse, « Continuer » lance le tour suivant.)
+  // jusqu'à ce que l'enfant trouve, et il peut réessayer tout de suite.
+  // (Après une bonne réponse, « Continuer » lance le tour suivant.)
   useEffect(() => {
     if (bobiReaction !== BobiReaction.FAILURE) return
     const timer = setTimeout(() => setBobiReaction(null), REACTION_DURATION_MS)
     return () => clearTimeout(timer)
-  }, [bobiReaction])
+  }, [bobiReaction, wrongAnswerCount])
 
   // Les compteurs du tirage sont gardés sur l'appareil à chaque nouveau tour
   useEffect(() => storeDrawCounts(round.drawCounts), [round])
@@ -113,6 +116,7 @@ function WorkshopScreen({ firstName = '' }) {
   function reactToWrongLetter(chosenLetter) {
     playFailureSound()
     setBobiReaction(BobiReaction.FAILURE)
+    setWrongAnswerCount((count) => count + 1)
     const feedback = createWrongAnswerFeedback(chosenLetter, previousWrongAnswerTemplateIndex.current)
     previousWrongAnswerTemplateIndex.current = feedback.templateIndex
     speakAsBobi(feedback.text, setIsBobiSpeaking)
@@ -191,7 +195,7 @@ function WorkshopScreen({ firstName = '' }) {
         letters={round.letters}
         fontClassName={round.letterFont.className}
         chosenLetterResults={chosenLetterResults}
-        areLettersDisabled={bobiReaction !== null}
+        areLettersDisabled={correctAnswerLesson !== null}
         onLetterPress={reactToChosenLetter}
       />
       {correctAnswerLesson && (
