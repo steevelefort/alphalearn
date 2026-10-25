@@ -20,6 +20,20 @@
   height: 100%;
 }
 
+/* Invisible (mais à sa place) tant que Bobi n'a pas fini la consigne, puis il apparaît en douceur */
+.repeat-instruction-button {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.3s,
+    transform 0.3s ease-out;
+}
+
+.repeat-instruction-button.is-revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .repeat-instruction-button:active {
   transform: translateY(0.5vw);
   box-shadow: 0 0.2vw 0 #b86720, 0 0.7vw 1vw rgba(81, 53, 29, 0.25);

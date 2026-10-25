@@ -1,0 +1,17 @@
+/* Même taille et même graisse apparente pour les trois polices.
+   Nunito est prise en 800 car son 700 paraît plus maigre que les autres.
+   Playwrite FR Moderne n'existe qu'en 400 maximum : le navigateur épaissit le trait (gras simulé). */
+.letter-font-print {
+  font-family: var(--font-interface);
+  font-weight: 800;
+}
+
+.letter-font-single-storey-a {
+  font-family: var(--font-reading);
+  font-weight: 700;
+}
+
+.letter-font-cursive {
+  font-family: var(--font-cursive);
+  font-weight: 700;
+}

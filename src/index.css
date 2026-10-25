@@ -1,7 +1,42 @@
+/* Polices du jeu (chargées dans fonts.js). Aucune police du système : même apparence partout.
+   Le « sans-serif » final ne sert que si une police n'a pas pu être chargée. */
+:root {
+  --font-interface: 'Nunito', sans-serif; /* boutons, prénom, score, bulles */
+  --font-reading: 'Andika', sans-serif; /* lettres et mots à lire (fenêtre de bonne réponse) */
+  --font-cursive: 'Playwrite FR Moderne', cursive;
+}
+
 body {
   margin: 0;
   background: #fff6e3;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-interface);
+  font-weight: 800;
   /* Pas de surlignage gris quand l'enfant touche un élément sur iPad */
   -webkit-tap-highlight-color: transparent;
+  /* Pas d'attente de Safari après un toucher (il vérifiait si c'était un double toucher pour zoomer) */
+  touch-action: manipulation;
+  /* Pas de sélection de texte, ni de menu « Copier » sur un appui long */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Les champs et les boutons n'héritent pas de la police par défaut : on la leur impose */
+button,
+input {
+  font-family: inherit;
+}
+
+/* Icône SVG placée dans un texte (voir InlineIcons.jsx) : à la taille et à la couleur du texte */
+.inline-icon {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  vertical-align: -0.08em;
+}
+
+/* Le prénom doit rester modifiable : sur iPad, sans sélection, on ne peut plus y taper correctement */
+input {
+  -webkit-user-select: text;
+  user-select: text;
 }

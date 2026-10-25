@@ -86,6 +86,8 @@ src/
 ├── RotateDeviceScreen.jsx  « Tourne ton écran », affiché en portrait
 ├── Bobi.jsx                Bobi de face, par calques (corps, yeux, bouche qui parle)
 ├── letters.js              lettres, sons, mots, et tirage sans confusion
+├── fonts.js                chargement des polices du jeu
+├── letterFonts.js          polices des lettres, qui alternent d'un tour à l'autre
 └── assets/                 images de Bobi, du décor et du titre, sons
 public/
 ├── manifest.webmanifest    description de l'application installable
@@ -97,6 +99,16 @@ public/
 Le code est écrit en anglais, avec des noms explicites. Les textes destinés aux enfants restent en français.
 
 ## Crédits
+
+### Polices
+
+Le jeu n'utilise aucune police du système : il a la même apparence sur tous les appareils. Les polices sont incluses dans le site via les paquets [Fontsource](https://fontsource.org) (jeu de caractères latin seulement), pour fonctionner hors ligne. Les lettres des blocs alternent entre les trois, d'un tour à l'autre.
+
+| Police | Rôle | Auteur | Licence |
+|---|---|---|---|
+| [Nunito](https://fonts.google.com/specimen/Nunito) | interface (boutons, prénom, score) ; lettres avec le a d'imprimerie (à deux étages) | The Nunito Project Authors | [SIL OFL 1.1](https://openfontlicense.org) |
+| [Andika](https://software.sil.org/andika/) | fenêtre de bonne réponse (lettre, syllabe, mot) ; lettres avec le a fermé. Conçue pour l'apprentissage de la lecture | SIL International | [SIL OFL 1.1](https://openfontlicense.org) |
+| [Playwrite FR Moderne](https://fonts.google.com/specimen/Playwrite+FR+Moderne) | lettres en cursive scolaire simple | Google Inc. (dessin : TypeTogether) | [SIL OFL 1.1](https://openfontlicense.org) |
 
 ### Sons
 

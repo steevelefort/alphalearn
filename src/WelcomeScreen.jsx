@@ -2,6 +2,7 @@ import { useState } from 'react'
 import backgroundImage from './assets/backgrounds/construction-site.png'
 import titleImage from './assets/title/title.png'
 import Bobi from './Bobi'
+import { PlayIcon } from './InlineIcons'
 import './WelcomeScreen.css'
 
 const FIRST_NAME_STORAGE_KEY = 'firstName'
@@ -82,7 +83,7 @@ function WelcomeScreen({ onTransitionToGameEnd }) {
           disabled={!firstName.trim()}
           onClick={startTransitionToGame}
         >
-          ▶ C’est parti !
+          <PlayIcon /> C’est parti !
         </button>
       </div>
     </div>

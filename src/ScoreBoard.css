@@ -11,7 +11,10 @@
   background: #fff6e3;
   box-shadow: 0 0.6vw 0 #d9c29b;
   color: #6b3f1d;
-  font: bold 3.6vw/1 system-ui, -apple-system, sans-serif;
+  font-family: var(--font-interface);
+  font-size: 3.6vw;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .score-board-star {

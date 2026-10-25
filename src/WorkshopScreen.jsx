@@ -4,6 +4,7 @@ import bodyImage from './assets/bobi/body.png'
 import foldedBackArmImage from './assets/bobi/back-arm-folded.png'
 import bladeImage from './assets/bobi/blade.png'
 import { BobiReaction, REACTION_DURATION_MS, REACTION_FACES } from './bobiReactions'
+import { ChosenLetterResult } from './chosenLetterResult'
 import { createCorrectAnswerLesson } from './correctAnswerLesson'
 import CorrectAnswerPopup from './CorrectAnswerPopup'
 import { createLetterRound } from './letterRound'
@@ -22,11 +23,18 @@ import './WorkshopScreen.css'
 // Retourne la bouche à la verticale autour de son centre (y ≈ 503 dans le repère de Bobi)
 const MOUTH_VERTICAL_FLIP_TRANSFORM = 'translate(0 1006) scale(1 -1)'
 
+// Si la synthèse vocale ne signale pas la fin de la consigne, le bouton pour la répéter
+// apparaît quand même au bout de ce délai (compté à partir du moment où Bobi commence)
+const REPEAT_INSTRUCTION_FALLBACK_MS = 8000
+
 // Bobi lit le texte ; sa bouche s'anime pendant toute la lecture
-function speakAsBobi(text, setIsBobiSpeaking) {
+function speakAsBobi(text, setIsBobiSpeaking, { onEnd = () => {} } = {}) {
   speakFrenchText(text, {
     onStart: () => setIsBobiSpeaking(true),
-    onEnd: () => setIsBobiSpeaking(false),
+    onEnd: () => {
+      setIsBobiSpeaking(false)
+      onEnd()
+    },
   })
 }
 
@@ -36,6 +44,10 @@ function WorkshopScreen({ firstName = '' }) {
   const [bobiReaction, setBobiReaction] = useState(null)
   const [correctAnswerLesson, setCorrectAnswerLesson] = useState(null)
   const [score, setScore] = useState({ successCount: 0, attemptCount: 0 })
+  // Résultat des lettres touchées pendant le tour en cours, par symbole : leur bloc change de couleur
+  const [chosenLetterResults, setChosenLetterResults] = useState({})
+  // Le bouton pour répéter la consigne n'apparaît qu'une fois la consigne dite en entier
+  const [isRepeatInstructionAvailable, setIsRepeatInstructionAvailable] = useState(false)
   // Pour ne pas répéter la même phrase d'erreur, ni le même encouragement, deux fois de suite
   const previousWrongAnswerTemplateIndex = useRef(null)
   const previousEncouragementIndex = useRef(null)
@@ -52,13 +64,20 @@ function WorkshopScreen({ firstName = '' }) {
     return idleMouthImage
   }
 
-  // À chaque tour, Bobi donne la consigne une fois que tous les blocs sont posés
+  // À chaque tour, Bobi donne la consigne une fois que tous les blocs sont posés,
+  // puis le bouton pour la répéter apparaît
   useEffect(() => {
-    const timer = setTimeout(
-      () => speakAsBobi(round.instructionText, setIsBobiSpeaking),
-      getAllBlocksLandedDelayMs(round.letters.length),
+    const allBlocksLandedDelay = getAllBlocksLandedDelayMs(round.letters.length)
+    const showRepeatInstructionButton = () => setIsRepeatInstructionAvailable(true)
+    const instructionTimer = setTimeout(
+      () => speakAsBobi(round.instructionText, setIsBobiSpeaking, { onEnd: showRepeatInstructionButton }),
+      allBlocksLandedDelay,
     )
-    return () => clearTimeout(timer)
+    const fallbackTimer = setTimeout(showRepeatInstructionButton, allBlocksLandedDelay + REPEAT_INSTRUCTION_FALLBACK_MS)
+    return () => {
+      clearTimeout(instructionTimer)
+      clearTimeout(fallbackTimer)
+    }
   }, [round])
 
   // Après une mauvaise réponse, Bobi reprend son air habituel : les mêmes lettres restent
@@ -106,11 +125,19 @@ function WorkshopScreen({ firstName = '' }) {
     setCorrectAnswerLesson(lesson)
   }
 
+  function rememberChosenLetterResult(chosenLetter, isCorrect) {
+    const result = isCorrect ? ChosenLetterResult.CORRECT : ChosenLetterResult.WRONG
+    setChosenLetterResults((previousResults) => ({ ...previousResults, [chosenLetter.symbol]: result }))
+  }
+
   function reactToChosenLetter(chosenLetter) {
     const isCorrect = chosenLetter === round.targetLetter
     stopSpeaking()
     setIsBobiSpeaking(false)
+    // Si l'enfant a coupé la consigne en touchant une lettre, il doit pouvoir la réécouter
+    setIsRepeatInstructionAvailable(true)
     countAttempt(isCorrect)
+    rememberChosenLetterResult(chosenLetter, isCorrect)
     if (isCorrect) {
       reactToCorrectLetter(chosenLetter)
     } else {
@@ -123,6 +150,8 @@ function WorkshopScreen({ firstName = '' }) {
     setIsBobiSpeaking(false)
     setCorrectAnswerLesson(null)
     setBobiReaction(null)
+    setChosenLetterResults({})
+    setIsRepeatInstructionAvailable(false)
     setRound((previousRound) => createLetterRound(previousRound))
   }
 
@@ -150,11 +179,13 @@ function WorkshopScreen({ firstName = '' }) {
         />
       </svg>
 
-      <RepeatInstructionButton onPress={repeatInstruction} />
+      <RepeatInstructionButton isAvailable={isRepeatInstructionAvailable} onPress={repeatInstruction} />
       <ScoreBoard successCount={score.successCount} attemptCount={score.attemptCount} />
       <LetterBlocks
         roundId={round.id}
         letters={round.letters}
+        fontClassName={round.letterFont.className}
+        chosenLetterResults={chosenLetterResults}
         areLettersDisabled={bobiReaction !== null}
         onLetterPress={reactToChosenLetter}
       />

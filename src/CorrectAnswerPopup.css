@@ -32,8 +32,9 @@
   background: #fff6e3;
   box-shadow: 0 1.6vw 3vw rgba(81, 53, 29, 0.3);
   color: #6b3f1d;
-  font-family: system-ui, -apple-system, sans-serif;
-  font-weight: bold;
+  /* Andika : conçue pour les enfants qui apprennent à lire, lettres très distinctes */
+  font-family: var(--font-reading);
+  font-weight: 700;
   animation: correct-answer-popup-pop-in 0.35s ease-out both;
 }
 
@@ -71,15 +72,14 @@
   font-size: 7vw;
 }
 
-/* Lettre trouvée : rouge et grasse. Lettre ajoutée : bleue. Lettre qui aide (u de « qu ») : grise. */
+/* Lettre trouvée : rouge. Lettre ajoutée : bleue. Lettre qui aide (u de « qu ») : grise.
+   Même graisse partout : seule la couleur les distingue, pour garder les lettres lisibles. */
 .lesson-part-found-letter {
   color: #d6402b;
-  font-weight: 900;
 }
 
 .lesson-part-added-letter {
   color: #2f6fc0;
-  font-weight: 900;
 }
 
 .lesson-part-helper-letter {
@@ -117,9 +117,28 @@
   padding: 1.8vw 3.2vw;
   background: #ed8b31;
   color: white;
-  font: bold 3vw system-ui, -apple-system, sans-serif;
+  font-family: var(--font-interface);
+  font-size: 3vw;
+  font-weight: 800;
   box-shadow: 0 0.6vw 0 #b86720;
   cursor: pointer;
+}
+
+/* Boutons invisibles (mais à leur place) tant que Bobi n'a pas fini d'expliquer,
+   puis ils apparaissent en douceur */
+.correct-answer-replay-button,
+.correct-answer-continue-button {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.3s,
+    transform 0.3s ease-out;
+}
+
+.correct-answer-replay-button.is-revealed,
+.correct-answer-continue-button.is-revealed {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .correct-answer-replay-button:active,

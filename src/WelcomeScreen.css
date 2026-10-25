@@ -88,7 +88,9 @@
   padding: 16px 24px;
   background: white;
   color: #51351d;
-  font: bold clamp(24px, 4vw, 48px) system-ui;
+  font-family: var(--font-interface);
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 800;
   text-align: center;
 }
 
@@ -98,7 +100,9 @@
   padding: 20px 34px;
   background: #ed8b31;
   color: white;
-  font: bold clamp(18px, 3vw, 32px) system-ui;
+  font-family: var(--font-interface);
+  font-size: clamp(18px, 3vw, 32px);
+  font-weight: 800;
   box-shadow: 0 6px 0 #b86720;
   cursor: pointer;
 }

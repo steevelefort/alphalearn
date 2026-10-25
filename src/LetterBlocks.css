@@ -21,13 +21,38 @@
   padding: 0;
   background: #fff6e3;
   color: #6b3f1d;
-  font: bold 10vw/1 system-ui, -apple-system, sans-serif;
+  /* La police et la graisse viennent de la classe de police du tour (letterFonts.css) */
+  font-size: 10vw;
+  line-height: 1;
   box-shadow: 0 0.8vw 0 #d9c29b, 0 1.6vw 2.4vw rgba(81, 53, 29, 0.25);
   cursor: pointer;
   pointer-events: auto;
-  /* Durée et retard réglés depuis LetterBlocks.jsx ; `both` cache le bloc avant sa chute */
+  transition: background-color 0.2s;
+  /* Durée et retard réglés depuis LetterBlocks.jsx.
+     `backwards` cache le bloc en haut avant sa chute, mais ne garde pas l'état final :
+     sinon l'animation l'emporterait sur :active, et le bloc ne s'enfoncerait plus au toucher. */
   animation-name: letter-block-fall;
-  animation-fill-mode: both;
+  animation-fill-mode: backwards;
+}
+
+/* La cursive a des hampes et des jambages très longs (f, g, j, p, y) : un peu plus petite
+   et remontée, elle tient dans le bloc. Son trait est épaissi pour égaler les autres polices. */
+.letter-block.letter-font-cursive {
+  padding-bottom: 1.8vw;
+  font-size: 8vw;
+  -webkit-text-stroke: 0.2vw currentColor;
+}
+
+/* Lettre touchée : rouge pastel si elle est fausse, vert pastel si elle est juste.
+   La lettre fausse le reste jusqu'à la fin du tour : l'enfant voit ce qu'il a déjà essayé. */
+.letter-block.is-wrong {
+  background: #f6d0c8;
+  box-shadow: 0 0.8vw 0 #dfa79c, 0 1.6vw 2.4vw rgba(81, 53, 29, 0.25);
+}
+
+.letter-block.is-correct {
+  background: #cfe8c4;
+  box-shadow: 0 0.8vw 0 #a3c995, 0 1.6vw 2.4vw rgba(81, 53, 29, 0.25);
 }
 
 .letter-block:active {

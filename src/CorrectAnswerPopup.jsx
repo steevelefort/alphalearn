@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { createLessonSentences } from './correctAnswerLesson'
+import { PlayIcon } from './InlineIcons'
 import SpeakerIcon from './SpeakerIcon'
 import { speakFrenchSentences } from './speech'
 import { SyllablePartRole } from './syllables'
 import './CorrectAnswerPopup.css'
 
-// Si la synthèse vocale ne signale pas le début des phrases (ou ne marche pas),
-// tout s'affiche quand même au bout de ce délai
+// Si la synthèse vocale ne signale pas le début et la fin des phrases (ou ne marche pas),
+// tout s'affiche quand même au bout de ce délai, bouton « Continuer » compris
 const REVEAL_EVERYTHING_FALLBACK_MS = 8000
 
 // Classe CSS de chaque rôle : lettre trouvée, lettre ajoutée, lettre qui aide (le u de « qu »)
@@ -55,10 +56,12 @@ function HighlightedWord({ word, syllableOccurrences }) {
 }
 
 // Fenêtre de bonne réponse : la lettre, une syllabe, puis un mot, qui apparaissent au fil de la voix de Bobi.
-// Les trois éléments sont toujours dans la page (invisibles avant leur tour) pour que rien ne bouge.
+// Les boutons « Réécouter » et « Continuer » n'apparaissent qu'une fois toute l'explication donnée.
+// Tout est toujours dans la page (invisible avant son tour) pour que rien ne bouge.
 function CorrectAnswerPopup({ lesson, onBobiSpeakingChange, onContinue }) {
   const sentences = useMemo(() => createLessonSentences(lesson), [lesson])
   const [revealedItemCount, setRevealedItemCount] = useState(0)
+  const [isExplanationFinished, setIsExplanationFinished] = useState(false)
 
   const lessonItems = [
     { key: 'letter', className: 'lesson-letter', content: <span className={getPartClassName(SyllablePartRole.FOUND_LETTER)}>{lesson.letter.symbol}</span> },
@@ -71,14 +74,22 @@ function CorrectAnswerPopup({ lesson, onBobiSpeakingChange, onContinue }) {
       // Chaque phrase annonce l'élément de même rang : il apparaît quand Bobi commence à en parler
       onSentenceStart: (sentenceIndex) => setRevealedItemCount((count) => Math.max(count, sentenceIndex + 1)),
       onStart: () => onBobiSpeakingChange(true),
-      onEnd: () => onBobiSpeakingChange(false),
+      // Fin de la lecture (ou échec de la synthèse vocale) : tout s'affiche, bouton « Continuer » compris
+      onEnd: () => {
+        onBobiSpeakingChange(false)
+        setRevealedItemCount(sentences.length)
+        setIsExplanationFinished(true)
+      },
     })
   }, [sentences, onBobiSpeakingChange])
 
   // À l'ouverture, Bobi lit la leçon (la leçon ne change pas tant que la fenêtre est ouverte)
   useEffect(() => {
     speakLesson()
-    const fallbackTimer = setTimeout(() => setRevealedItemCount(sentences.length), REVEAL_EVERYTHING_FALLBACK_MS)
+    const fallbackTimer = setTimeout(() => {
+      setRevealedItemCount(sentences.length)
+      setIsExplanationFinished(true)
+    }, REVEAL_EVERYTHING_FALLBACK_MS)
     return () => clearTimeout(fallbackTimer)
   }, [speakLesson, sentences.length])
 
@@ -92,11 +103,22 @@ function CorrectAnswerPopup({ lesson, onBobiSpeakingChange, onContinue }) {
         ))}
 
         <div className="correct-answer-actions">
-          <button type="button" className="correct-answer-replay-button" aria-label="Réécouter" onClick={speakLesson}>
+          <button
+            type="button"
+            className={`correct-answer-replay-button ${isExplanationFinished ? 'is-revealed' : ''}`}
+            aria-label="Réécouter"
+            disabled={!isExplanationFinished}
+            onClick={speakLesson}
+          >
             <SpeakerIcon />
           </button>
-          <button type="button" className="correct-answer-continue-button" onClick={onContinue}>
-            Continuer ▶
+          <button
+            type="button"
+            className={`correct-answer-continue-button ${isExplanationFinished ? 'is-revealed' : ''}`}
+            disabled={!isExplanationFinished}
+            onClick={onContinue}
+          >
+            Continuer <PlayIcon />
           </button>
         </div>
       </div>

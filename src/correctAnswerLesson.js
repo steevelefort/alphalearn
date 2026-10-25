@@ -1,3 +1,4 @@
+import { putInFrenchQuotes } from './frenchQuotes'
 import { describeLetterSounds } from './letterRound'
 import { pickRandomIndexDifferentFrom, pickRandomItem, shuffle } from './random'
 import { findSimpleSyllablesWithLetter, SyllablePartRole } from './syllables'
@@ -58,28 +59,29 @@ export function createCorrectAnswerLesson(letter, { previousEncouragementIndex =
   }
 }
 
-// Nom de la lettre pour la synthèse vocale : en majuscule, elle est lue comme une lettre
-// (« B » se lit « bé », « É » se lit « e accent aigu »).
+// Nom de la lettre pour la synthèse vocale, entre guillemets : en majuscule, elle est lue
+// comme une lettre (« B » se lit « bé », « É » se lit « e accent aigu »).
 function getSpokenLetterName(symbol) {
-  return symbol.toUpperCase()
+  return putInFrenchQuotes(symbol.toUpperCase())
 }
 
 // On dit « la lettre « O » » plutôt que « un O » : la synthèse vocale ferait la liaison (« un-no »),
 // ce qui fausse justement le son qu'on apprend à l'enfant. Pour la même raison, pas de pluriel
-// (« les lettres U » donnerait « lettres-zu »). Les guillemets aident la voix à détacher la lettre.
+// (« les lettres U » donnerait « lettres-zu »). La syllabe est un son : elle aussi entre guillemets.
 function describeHowToBuildSyllable(syllable) {
   const foundPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.FOUND_LETTER)
   const addedPartIndex = syllable.parts.findIndex((part) => part.role === SyllablePartRole.ADDED_LETTER)
   const helperPart = syllable.parts.find((part) => part.role === SyllablePartRole.HELPER_LETTER)
   const addedLetterName = getSpokenLetterName(syllable.parts[addedPartIndex].text)
+  const spokenSyllable = putInFrenchQuotes(syllable.text)
 
   if (helperPart) {
-    return `Avec la lettre « ${getSpokenLetterName(helperPart.text)} » et la lettre « ${addedLetterName} », ça fait ${syllable.text} !`
+    return `Avec la lettre ${getSpokenLetterName(helperPart.text)} et la lettre ${addedLetterName}, ça fait ${spokenSyllable} !`
   }
   if (addedPartIndex < foundPartIndex) {
-    return `Si tu mets la lettre « ${addedLetterName} » devant, ça fait ${syllable.text} !`
+    return `Si tu mets la lettre ${addedLetterName} devant, ça fait ${spokenSyllable} !`
   }
-  return `Si tu lui ajoutes la lettre « ${addedLetterName} », ça fait ${syllable.text} !`
+  return `Si tu lui ajoutes la lettre ${addedLetterName}, ça fait ${spokenSyllable} !`
 }
 
 // Les phrases de Bobi, dans l'ordre d'affichage : la lettre (précédée de l'encouragement), la syllabe, le mot.
