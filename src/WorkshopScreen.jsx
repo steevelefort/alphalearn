@@ -7,6 +7,7 @@ import { BobiReaction, REACTION_DURATION_MS, REACTION_FACES } from './bobiReacti
 import { ChosenLetterResult } from './chosenLetterResult'
 import { createCorrectAnswerLesson } from './correctAnswerLesson'
 import CorrectAnswerPopup from './CorrectAnswerPopup'
+import { readStoredDrawCounts, storeDrawCounts } from './drawCountsStorage'
 import { createLetterRound } from './letterRound'
 import { getAllBlocksLandedDelayMs } from './letterBlockTiming'
 import LetterBlocks from './LetterBlocks'
@@ -39,7 +40,8 @@ function speakAsBobi(text, setIsBobiSpeaking, { onEnd = () => {} } = {}) {
 }
 
 function WorkshopScreen({ firstName = '' }) {
-  const [round, setRound] = useState(() => createLetterRound())
+  // Le premier tour reprend les compteurs du tirage équilibré gardés sur l'appareil
+  const [round, setRound] = useState(() => createLetterRound(null, readStoredDrawCounts()))
   const [isBobiSpeaking, setIsBobiSpeaking] = useState(false)
   const [bobiReaction, setBobiReaction] = useState(null)
   const [correctAnswerLesson, setCorrectAnswerLesson] = useState(null)
@@ -87,6 +89,9 @@ function WorkshopScreen({ firstName = '' }) {
     const timer = setTimeout(() => setBobiReaction(null), REACTION_DURATION_MS)
     return () => clearTimeout(timer)
   }, [bobiReaction])
+
+  // Les compteurs du tirage sont gardés sur l'appareil à chaque nouveau tour
+  useEffect(() => storeDrawCounts(round.drawCounts), [round])
 
   // En quittant l'écran, Bobi se tait
   useEffect(() => stopSpeaking, [])

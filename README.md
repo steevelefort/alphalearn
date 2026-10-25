@@ -36,7 +36,9 @@ L'objectif est de garder un code propre et compréhensible, sans perdre la maît
 
 `src/letters.js` décrit chaque lettre : son type (voyelle ou consonne), le texte que la synthèse vocale lit pour faire entendre son son, et quelques mots très simples (*papa*, *bobo*, *dodo*…). Les lettres **é**, **è** et **ê** y figurent comme des sons à part entière.
 
-Pour ne pas piéger l'enfant, deux lettres qui font le même son (i et y, c, k et q, s et z…) ou des sons trop proches (b et p, m et n, é et è…) ne sont jamais proposées sur le même écran : c'est le rôle de `pickNonConfusableLetters()`.
+Pour ne pas piéger l'enfant, deux lettres qui font le même son (i et y, c, k et q, s et z…) ou des sons trop proches (b et p, m et n, é et è…) ne sont jamais proposées sur le même écran : c'est le rôle de `areLettersConfusable()`.
+
+Les lettres sont tirées de façon équilibrée (`balancedLetterDraw.js`) : le jeu compte combien de fois chaque lettre est apparue et a été demandée, et choisit en priorité les moins sorties. Sur une partie, chaque lettre finit par être vue et demandée, sans qu'une lettre revienne sans cesse. Ces compteurs sont gardés sur l'appareil (`drawCountsStorage.js`), comme le prénom : l'équilibre se poursuit d'une partie à l'autre.
 
 ## Appareils ciblés
 
@@ -85,7 +87,9 @@ src/
 ├── WorkshopScreen.jsx      écran de jeu, dans le chantier
 ├── RotateDeviceScreen.jsx  « Tourne ton écran », affiché en portrait
 ├── Bobi.jsx                Bobi de face, par calques (corps, yeux, bouche qui parle)
-├── letters.js              lettres, sons, mots, et tirage sans confusion
+├── letters.js              lettres, sons, mots, et règle anti-confusion
+├── balancedLetterDraw.js   tirage équilibré des lettres de chaque tour
+├── drawCountsStorage.js    compteurs du tirage gardés sur l'appareil
 ├── fonts.js                chargement des polices du jeu
 ├── letterFonts.js          polices des lettres, qui alternent d'un tour à l'autre
 └── assets/                 images de Bobi, du décor et du titre, sons

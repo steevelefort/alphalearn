@@ -1,7 +1,7 @@
 import { putInFrenchQuotes } from './frenchQuotes'
 import { LETTER_FONTS } from './letterFonts'
-import { pickNonConfusableLetters } from './letters'
-import { pickRandomIndexDifferentFrom, pickRandomItem } from './random'
+import { createEmptyDrawCounts, drawBalancedLetters } from './balancedLetterDraw'
+import { pickRandomIndexDifferentFrom } from './random'
 
 export const LETTERS_PER_ROUND = 3
 
@@ -39,11 +39,17 @@ export function describeLetterSounds(letter) {
 }
 
 // Un tour de jeu : 3 lettres qui ne se confondent pas, celle à trouver, la consigne, et la police.
+// Les lettres sont tirées de façon équilibrée (voir balancedLetterDraw.js) : les compteurs
+// de sorties passent d'un tour au suivant dans `drawCounts`. Pour le premier tour d'une partie,
+// `initialDrawCounts` reprend les compteurs des parties précédentes.
 // La consigne change à chaque tour : jamais deux fois la même phrase d'affilée.
 // Les polices des lettres se succèdent dans l'ordre (imprimerie, a fermé, cursive, imprimerie…).
-export function createLetterRound(previousRound = null) {
-  const letters = pickNonConfusableLetters(LETTERS_PER_ROUND)
-  const targetLetter = pickRandomItem(letters)
+export function createLetterRound(previousRound = null, initialDrawCounts = createEmptyDrawCounts()) {
+  const { letters, targetLetter, drawCounts } = drawBalancedLetters(
+    LETTERS_PER_ROUND,
+    previousRound ? previousRound.drawCounts : initialDrawCounts,
+    previousRound ? previousRound.targetLetter : null,
+  )
   const instructionIndex = pickRandomIndexDifferentFrom(
     INSTRUCTION_TEMPLATES.length,
     previousRound ? previousRound.instructionIndex : null,
@@ -55,6 +61,7 @@ export function createLetterRound(previousRound = null) {
     id: previousRound ? previousRound.id + 1 : 1,
     letters,
     targetLetter,
+    drawCounts,
     instructionIndex,
     letterFontIndex,
     letterFont: LETTER_FONTS[letterFontIndex],

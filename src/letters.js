@@ -86,29 +86,3 @@ export function areLettersConfusable(firstLetter, secondLetter, { avoidSimilarSo
     ),
   )
 }
-
-function shuffle(items) {
-  const shuffledItems = [...items]
-  for (let index = shuffledItems.length - 1; index > 0; index--) {
-    const randomIndex = Math.floor(Math.random() * (index + 1))
-    ;[shuffledItems[index], shuffledItems[randomIndex]] = [shuffledItems[randomIndex], shuffledItems[index]]
-  }
-  return shuffledItems
-}
-
-// Tire au hasard jusqu'à `count` lettres qui ne se confondent pas entre elles.
-// Les lettres muettes (h) sont écartées : on ne peut pas faire entendre leur son.
-// Peut en rendre moins que demandé si `candidates` ne contient pas assez de lettres compatibles.
-export function pickNonConfusableLetters(count, { candidates = letters, avoidSimilarSounds = true } = {}) {
-  const audibleCandidates = candidates.filter((letter) => letter.sounds.length > 0)
-  const pickedLetters = []
-
-  for (const candidate of shuffle(audibleCandidates)) {
-    if (pickedLetters.length === count) break
-    const isConfusableWithPickedLetter = pickedLetters.some((pickedLetter) =>
-      areLettersConfusable(pickedLetter, candidate, { avoidSimilarSounds }),
-    )
-    if (!isConfusableWithPickedLetter) pickedLetters.push(candidate)
-  }
-  return pickedLetters
-}
