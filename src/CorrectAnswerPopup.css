@@ -1,0 +1,135 @@
+/* Voile crème sur le jeu ; Bobi reste devant (voir .workshop-bobi) pour qu'on le voie parler */
+.correct-answer-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background: rgba(255, 246, 227, 0.55);
+  animation: correct-answer-overlay-fade-in 0.3s ease-out both;
+}
+
+@keyframes correct-answer-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Fenêtre à droite de Bobi, sous le score */
+.correct-answer-popup {
+  position: absolute;
+  top: 13vw;
+  right: 4vw;
+  bottom: 3vw;
+  left: 47vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 0.6vw solid #ed8b31;
+  border-radius: 3vw;
+  background: #fff6e3;
+  box-shadow: 0 1.6vw 3vw rgba(81, 53, 29, 0.3);
+  color: #6b3f1d;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: bold;
+  animation: correct-answer-popup-pop-in 0.35s ease-out both;
+}
+
+@keyframes correct-answer-popup-pop-in {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+
+.lesson-item {
+  margin: 0;
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.3s,
+    transform 0.3s ease-out;
+}
+
+.lesson-item.is-revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lesson-letter {
+  font-size: 14vw;
+}
+
+.lesson-syllable {
+  font-size: 9vw;
+}
+
+.lesson-word {
+  font-size: 7vw;
+}
+
+/* Lettre trouvée : rouge et grasse. Lettre ajoutée : bleue. Lettre qui aide (u de « qu ») : grise. */
+.lesson-part-found-letter {
+  color: #d6402b;
+  font-weight: 900;
+}
+
+.lesson-part-added-letter {
+  color: #2f6fc0;
+  font-weight: 900;
+}
+
+.lesson-part-helper-letter {
+  color: #a39789;
+}
+
+/* Pas de `gap` en flexbox (absent de Safari 12) : l'écart vient de la marge du bouton */
+.correct-answer-actions {
+  display: flex;
+  align-items: center;
+}
+
+.correct-answer-replay-button {
+  width: 8vw;
+  height: 8vw;
+  margin-right: 2.5vw;
+  border: 0;
+  border-radius: 50%;
+  padding: 1.6vw;
+  background: #ed8b31;
+  color: white;
+  box-shadow: 0 0.6vw 0 #b86720;
+  cursor: pointer;
+}
+
+.correct-answer-replay-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.correct-answer-continue-button {
+  border: 0;
+  border-radius: 2.4vw;
+  padding: 1.8vw 3.2vw;
+  background: #ed8b31;
+  color: white;
+  font: bold 3vw system-ui, -apple-system, sans-serif;
+  box-shadow: 0 0.6vw 0 #b86720;
+  cursor: pointer;
+}
+
+.correct-answer-replay-button:active,
+.correct-answer-continue-button:active {
+  transform: translateY(0.4vw);
+  box-shadow: 0 0.2vw 0 #b86720;
+}
+
+.correct-answer-replay-button:focus-visible,
+.correct-answer-continue-button:focus-visible {
+  outline: 3px solid #367aaf;
+  outline-offset: 3px;
+}

@@ -1,4 +1,4 @@
-.atelier {
+.workshop-screen {
   position: fixed;
   top: 0;
   right: 0;
@@ -10,7 +10,7 @@
 }
 
 /* Apparition depuis le fondu crème de l'accueil */
-.atelier::after {
+.workshop-screen::after {
   content: '';
   position: absolute;
   top: 0;
@@ -19,18 +19,20 @@
   left: 0;
   background: #fff6e3;
   pointer-events: none;
-  animation: atelier-apparait 0.8s ease-out forwards;
+  animation: workshop-fade-in 0.8s ease-out forwards;
 }
 
-@keyframes atelier-apparait {
+@keyframes workshop-fade-in {
   to {
     opacity: 0;
   }
 }
 
-/* Même distance du bord gauche et du bas */
-.atelier-bobi {
+/* Même distance du bord gauche et du bas.
+   z-index : Bobi reste devant le voile de la fenêtre de bonne réponse, qu'on le voie parler. */
+.workshop-bobi {
   position: absolute;
+  z-index: 2;
   left: 3.5vw;
   bottom: 3.5vw;
   width: 43.5%;
@@ -38,12 +40,12 @@
 }
 
 /* Bras arrière, comme « Coucou » : il se balance autour de son attache */
-.atelier-bras {
+.workshop-back-arm {
   transform-origin: 493px 446px;
-  animation: atelier-coucou 1.5s ease-in-out infinite alternate;
+  animation: workshop-arm-wave 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes atelier-coucou {
+@keyframes workshop-arm-wave {
   from {
     transform: rotate(-7.5deg);
   }
@@ -53,11 +55,11 @@
 }
 
 /* Pelle avant, comme « Bravo » : elle monte et descend doucement */
-.atelier-lame {
-  animation: atelier-pelle 1.5s ease-in-out infinite alternate;
+.workshop-blade {
+  animation: workshop-blade-lift 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes atelier-pelle {
+@keyframes workshop-blade-lift {
   to {
     transform: translateY(-30px);
   }

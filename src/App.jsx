@@ -1,26 +1,29 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import Accueil from './Accueil'
-import Atelier from './Atelier'
-import Portrait from './Portrait'
-import './App.css'
+import WelcomeScreen from './WelcomeScreen'
+import WorkshopScreen from './WorkshopScreen'
+import RotateDeviceScreen from './RotateDeviceScreen'
+
+const Screen = Object.freeze({
+  WELCOME: 'welcome',
+  WORKSHOP: 'workshop',
+})
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [ecran, setEcran] = useState('accueil')
+  const [currentScreen, setCurrentScreen] = useState(Screen.WELCOME)
+  const [firstName, setFirstName] = useState('')
+
+  function startGame(enteredFirstName) {
+    setFirstName(enteredFirstName)
+    setCurrentScreen(Screen.WORKSHOP)
+  }
 
   return (
     <>
-      {ecran === 'accueil' && (
-        <Accueil
-          onStart={() => setCount((count) => count + 1)}
-          onEnd={() => setEcran('atelier')}
-        />
+      {currentScreen === Screen.WELCOME && (
+        <WelcomeScreen onTransitionToGameEnd={startGame} />
       )}
-      {ecran === 'atelier' && <Atelier />}
-      <Portrait />
+      {currentScreen === Screen.WORKSHOP && <WorkshopScreen firstName={firstName} />}
+      <RotateDeviceScreen />
     </>
   )
 }

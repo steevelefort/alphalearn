@@ -1,0 +1,24 @@
+/* Devant le voile de la fenêtre de bonne réponse : on voit le score augmenter */
+.score-board {
+  position: absolute;
+  top: 2.5vw;
+  right: 4vw;
+  z-index: 2;
+  margin: 0;
+  border: 0.5vw solid #ed8b31;
+  border-radius: 3vw;
+  padding: 0.8vw 2.2vw;
+  background: #fff6e3;
+  box-shadow: 0 0.6vw 0 #d9c29b;
+  color: #6b3f1d;
+  font: bold 3.6vw/1 system-ui, -apple-system, sans-serif;
+}
+
+.score-board-star {
+  margin-right: 0.8vw;
+  color: #f2b705;
+}
+
+.score-board-separator {
+  color: #a39789;
+}

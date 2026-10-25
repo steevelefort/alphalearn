@@ -1,9 +1,9 @@
-.portrait {
+.rotate-device-screen {
   display: none;
 }
 
 @media (orientation: portrait) {
-  .portrait {
+  .rotate-device-screen {
     position: fixed;
     top: 0;
     right: 0;
@@ -20,7 +20,7 @@
   }
 }
 
-.portrait-bulle {
+.rotate-device-bubble {
   margin: 0 0 4vh;
   border: 4px solid #ed8b31;
   border-radius: 26px;
@@ -31,6 +31,6 @@
   text-align: center;
 }
 
-.portrait-bobi {
+.rotate-device-bobi {
   width: min(80vw, 50vh);
 }

@@ -1,0 +1,15 @@
+import backgroundImage from './assets/backgrounds/construction-site.png'
+import Bobi from './Bobi'
+import './RotateDeviceScreen.css'
+
+// Affiché uniquement en mode portrait (voir RotateDeviceScreen.css)
+function RotateDeviceScreen() {
+  return (
+    <div className="rotate-device-screen" style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <p className="rotate-device-bubble">Tourne ton écran pour jouer avec moi&nbsp;!&nbsp;↻</p>
+      <Bobi className="rotate-device-bobi" />
+    </div>
+  )
+}
+
+export default RotateDeviceScreen

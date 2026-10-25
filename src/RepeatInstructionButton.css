@@ -1,0 +1,31 @@
+/* Au-dessus de Bobi, dans le ciel */
+.repeat-instruction-button {
+  position: absolute;
+  left: 9vw;
+  top: 8vw;
+  width: 12vw;
+  height: 12vw;
+  border: 0.6vw solid #fff6e3;
+  border-radius: 50%;
+  padding: 2.4vw;
+  background: #ed8b31;
+  color: white;
+  box-shadow: 0 0.7vw 0 #b86720, 0 1.4vw 2vw rgba(81, 53, 29, 0.25);
+  cursor: pointer;
+}
+
+.repeat-instruction-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.repeat-instruction-button:active {
+  transform: translateY(0.5vw);
+  box-shadow: 0 0.2vw 0 #b86720, 0 0.7vw 1vw rgba(81, 53, 29, 0.25);
+}
+
+.repeat-instruction-button:focus-visible {
+  outline: 3px solid #367aaf;
+  outline-offset: 3px;
+}

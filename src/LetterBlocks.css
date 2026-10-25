@@ -1,0 +1,68 @@
+/* Rangée de blocs, centrée dans l'écran.
+   Pas de `gap` en flexbox (absent de Safari 12) : l'écart vient des marges des blocs. */
+.letter-blocks {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 18%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.letter-block {
+  width: 15vw;
+  height: 15vw;
+  margin: 0 1.5vw;
+  border: 0;
+  border-radius: 2.2vw;
+  padding: 0;
+  background: #fff6e3;
+  color: #6b3f1d;
+  font: bold 10vw/1 system-ui, -apple-system, sans-serif;
+  box-shadow: 0 0.8vw 0 #d9c29b, 0 1.6vw 2.4vw rgba(81, 53, 29, 0.25);
+  cursor: pointer;
+  pointer-events: auto;
+  /* Durée et retard réglés depuis LetterBlocks.jsx ; `both` cache le bloc avant sa chute */
+  animation-name: letter-block-fall;
+  animation-fill-mode: both;
+}
+
+.letter-block:active {
+  transform: translateY(0.5vw);
+  box-shadow: 0 0.3vw 0 #d9c29b, 0 0.8vw 1.2vw rgba(81, 53, 29, 0.25);
+}
+
+/* Pendant que Bobi réagit : le bloc ne réagit plus, mais garde son aspect
+   (Safari grise sinon les boutons désactivés) */
+.letter-block:disabled {
+  color: #6b3f1d;
+  opacity: 1;
+  cursor: default;
+}
+
+.letter-block:focus-visible {
+  outline: 3px solid #367aaf;
+  outline-offset: 3px;
+}
+
+/* Chute rapide, petit rebond, puis le bloc se pose */
+@keyframes letter-block-fall {
+  0% {
+    transform: translateY(-100vh);
+    animation-timing-function: ease-in;
+  }
+  70% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  85% {
+    transform: translateY(-3vw);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
